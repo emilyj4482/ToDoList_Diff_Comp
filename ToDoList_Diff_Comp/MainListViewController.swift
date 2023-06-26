@@ -66,9 +66,7 @@ class MainListViewController: UIViewController {
     }
 
     @IBAction func addListButtonTapped(_ sender: UIButton) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let vc = storyboard.instantiateViewController(withIdentifier: "AddNewListViewController") as? AddNewListViewController else { return }
-        
+        guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "AddNewListViewController") as? AddNewListViewController else { return }
         present(vc, animated: true)
     }
     

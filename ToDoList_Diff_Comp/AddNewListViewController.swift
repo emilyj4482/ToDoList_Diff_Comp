@@ -31,6 +31,7 @@ class AddNewListViewController: UIViewController {
         vm.addList(vm.createList(newListName))
         
         // todo : main view reload
+        print(vm.lists)
         
         dismiss(animated: true)
     }
