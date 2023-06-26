@@ -12,11 +12,7 @@ class MainListViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var listCountLabel: UILabel!
     
-    // 임시 값
-    var lists: [List] = [
-        List(id: 1, name: "Important", tasks: [Task(id: 1, listId: 1, title: "important task", isDone: false, isImportant: true)]),
-        List(id: 2, name: "to study", tasks: [Task(id: 1, listId: 2, title: "iOS", isDone: false, isImportant: false)])
-    ]
+    var vm = TaskViewModel.shared
     
     // diffable data source 정의 : 단일 섹션
     enum Section {
@@ -36,8 +32,7 @@ class MainListViewController: UIViewController {
         
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.main])
-        // 임시 값 주입
-        snapshot.appendItems(lists, toSection: .main)
+        snapshot.appendItems(vm.lists, toSection: .main)
         datasource.apply(snapshot)
         
         collectionView.collectionViewLayout = layout()
@@ -62,7 +57,7 @@ class MainListViewController: UIViewController {
     
     // list count label 뷰 적용
     func updateCountLabel() {
-        let count = lists.count - 1
+        let count = vm.lists.count - 1
         if count <= 1 {
             listCountLabel.text = "You have \(count) custom list."
         } else {

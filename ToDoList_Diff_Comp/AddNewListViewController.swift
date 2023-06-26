@@ -11,6 +11,8 @@ class AddNewListViewController: UIViewController {
     
     @IBOutlet weak var textField: UITextField!
 
+    var vm = TaskViewModel.shared
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -22,6 +24,14 @@ class AddNewListViewController: UIViewController {
     }
     
     @IBAction func doneButtonTapped(_ sender: UIButton) {
+        guard var newListName = textField.text?.trim() else { return }
+        if newListName.isEmpty {
+            newListName = "Untitled list"
+        }
+        vm.addList(vm.createList(newListName))
+        
+        // todo : main view reload
+        
         dismiss(animated: true)
     }
 }

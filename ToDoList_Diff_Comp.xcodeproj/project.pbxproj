@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A11764312A49D16C00A54ABE /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11764302A49D16C00A54ABE /* TaskViewModel.swift */; };
 		A1B682272A45C84200BAC12A /* AddNewListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B682262A45C84200BAC12A /* AddNewListViewController.swift */; };
 		A1B682292A45C84F00BAC12A /* ToDoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B682282A45C84F00BAC12A /* ToDoListViewController.swift */; };
 		A1B6822B2A45C87900BAC12A /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B6822A2A45C87900BAC12A /* ListCell.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A11764302A49D16C00A54ABE /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
 		A1B682262A45C84200BAC12A /* AddNewListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewListViewController.swift; sourceTree = "<group>"; };
 		A1B682282A45C84F00BAC12A /* ToDoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListViewController.swift; sourceTree = "<group>"; };
 		A1B6822A2A45C87900BAC12A /* ListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 				A1BC230B2A45830C00C5D9BA /* AppDelegate.swift */,
 				A1BC230D2A45830C00C5D9BA /* SceneDelegate.swift */,
 				A1B6822E2A45CE1200BAC12A /* Task.swift */,
+				A11764302A49D16C00A54ABE /* TaskViewModel.swift */,
 				A1BC230F2A45830C00C5D9BA /* MainListViewController.swift */,
 				A1B682262A45C84200BAC12A /* AddNewListViewController.swift */,
 				A1B682282A45C84F00BAC12A /* ToDoListViewController.swift */,
@@ -160,6 +163,7 @@
 				A1BC230E2A45830C00C5D9BA /* SceneDelegate.swift in Sources */,
 				A1B6822B2A45C87900BAC12A /* ListCell.swift in Sources */,
 				A1B682292A45C84F00BAC12A /* ToDoListViewController.swift in Sources */,
+				A11764312A49D16C00A54ABE /* TaskViewModel.swift in Sources */,
 				A1B682272A45C84200BAC12A /* AddNewListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
