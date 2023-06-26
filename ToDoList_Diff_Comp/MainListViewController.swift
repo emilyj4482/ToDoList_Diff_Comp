@@ -41,6 +41,8 @@ class MainListViewController: UIViewController {
         datasource.apply(snapshot)
         
         collectionView.collectionViewLayout = layout()
+        
+        updateCountLabel()
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
@@ -56,6 +58,16 @@ class MainListViewController: UIViewController {
         let layout = UICollectionViewCompositionalLayout(section: section)
         
         return layout
+    }
+    
+    // list count label 뷰 적용
+    func updateCountLabel() {
+        let count = lists.count - 1
+        if count <= 1 {
+            listCountLabel.text = "You have \(count) custom list."
+        } else {
+            listCountLabel.text = "You have \(count) custom lists."
+        }
     }
 
     
