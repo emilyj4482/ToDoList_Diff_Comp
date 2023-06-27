@@ -41,6 +41,8 @@ class MainListViewController: UIViewController {
         collectionView.collectionViewLayout = layout()
         
         updateCountLabel()
+        
+        collectionView.delegate = self
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
@@ -88,3 +90,15 @@ class MainListViewController: UIViewController {
     
 }
 
+extension MainListViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let list = vm.lists[indexPath.item]
+        
+        guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "ToDoListViewController") as? ToDoListViewController else { return }
+        
+        vc.title = list.name
+        vc.index = indexPath.item
+        
+        navigationController?.pushViewController(vc, animated: true)
+    }
+}

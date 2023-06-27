@@ -179,27 +179,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CXt-Tn-KeW">
-                                <rect key="frame" x="0.0" y="59" width="393" height="44"/>
-                                <items>
-                                    <navigationItem title="Title" largeTitleDisplayMode="always" id="2KO-Z0-Frl">
-                                        <barButtonItem key="leftBarButtonItem" title="Item" image="chevron.backward" catalog="system" style="plain" id="dcz-rZ-2QJ">
-                                            <color key="tintColor" systemColor="systemPinkColor"/>
-                                            <connections>
-                                                <action selector="backButtonTapped:" destination="m4j-E5-FrS" id="HVS-3T-Kd9"/>
-                                            </connections>
-                                        </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="PFb-0Y-VvA">
-                                            <color key="tintColor" systemColor="systemPinkColor"/>
-                                            <connections>
-                                                <action selector="doneButtonTapped:" destination="m4j-E5-FrS" id="Wvh-Ah-ktb"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="p0P-bg-AWt">
-                                <rect key="frame" x="0.0" y="103" width="393" height="673"/>
+                                <rect key="frame" x="0.0" y="59" width="393" height="717"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="PSU-Uu-nCn">
                                     <size key="itemSize" width="393" height="96"/>
@@ -257,7 +238,7 @@
                                 <rect key="frame" x="0.0" y="768" width="393" height="50"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="tU3-a9-ppl">
-                                        <rect key="frame" x="15" y="15.999999999999998" width="20" height="18.666666666666664"/>
+                                        <rect key="frame" x="15" y="16" width="20" height="18.666666666666657"/>
                                         <color key="tintColor" systemColor="systemPinkColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="tU3-a9-ppl" secondAttribute="height" multiplier="1:1" id="7F5-dk-dMM"/>
@@ -288,6 +269,9 @@
                                 <state key="normal" title=" Add a Task" image="plus" catalog="system">
                                     <color key="titleColor" systemColor="systemPinkColor"/>
                                 </state>
+                                <connections>
+                                    <action selector="addButtonTapped:" destination="m4j-E5-FrS" eventType="touchUpInside" id="bgv-HC-VUa"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Ijr-zx-asd"/>
@@ -295,22 +279,15 @@
                         <constraints>
                             <constraint firstItem="Ijr-zx-asd" firstAttribute="trailing" secondItem="amR-q5-9nL" secondAttribute="trailing" id="BoA-NF-sXD"/>
                             <constraint firstItem="Ijr-zx-asd" firstAttribute="trailing" secondItem="p0P-bg-AWt" secondAttribute="trailing" id="CN2-LD-WQg"/>
+                            <constraint firstItem="p0P-bg-AWt" firstAttribute="top" secondItem="Ijr-zx-asd" secondAttribute="top" id="ILd-bM-q61"/>
                             <constraint firstItem="YvV-YY-JqF" firstAttribute="top" secondItem="p0P-bg-AWt" secondAttribute="bottom" constant="10" id="V7c-pt-1tJ"/>
                             <constraint firstItem="Ijr-zx-asd" firstAttribute="bottom" secondItem="amR-q5-9nL" secondAttribute="bottom" id="WHJ-1z-CQz"/>
-                            <constraint firstItem="CXt-Tn-KeW" firstAttribute="leading" secondItem="Ijr-zx-asd" secondAttribute="leading" id="ZNN-lq-dlE"/>
                             <constraint firstItem="YvV-YY-JqF" firstAttribute="leading" secondItem="Ijr-zx-asd" secondAttribute="leading" constant="20" id="dhY-xg-NKB"/>
-                            <constraint firstItem="Ijr-zx-asd" firstAttribute="trailing" secondItem="CXt-Tn-KeW" secondAttribute="trailing" id="eMy-Z6-gjS"/>
                             <constraint firstItem="p0P-bg-AWt" firstAttribute="leading" secondItem="Ijr-zx-asd" secondAttribute="leading" id="fH4-Mk-gar"/>
                             <constraint firstItem="amR-q5-9nL" firstAttribute="leading" secondItem="Ijr-zx-asd" secondAttribute="leading" id="nbe-eQ-sWw"/>
-                            <constraint firstItem="p0P-bg-AWt" firstAttribute="top" secondItem="CXt-Tn-KeW" secondAttribute="bottom" id="pkx-zQ-WHb"/>
-                            <constraint firstItem="CXt-Tn-KeW" firstAttribute="top" secondItem="Ijr-zx-asd" secondAttribute="top" id="tlC-Ve-Th7"/>
                             <constraint firstItem="Ijr-zx-asd" firstAttribute="bottom" secondItem="YvV-YY-JqF" secondAttribute="bottom" constant="10" id="yUH-6q-1jX"/>
                         </constraints>
                     </view>
-                    <connections>
-                        <outlet property="doneButton" destination="PFb-0Y-VvA" id="MgF-dD-LS7"/>
-                        <outlet property="navigationTitle" destination="2KO-Z0-Frl" id="WuZ-bZ-7Jw"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uGh-oW-pOh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -336,7 +313,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="chevron.backward" catalog="system" width="97" height="128"/>
         <image name="circle" catalog="system" width="128" height="123"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="star" catalog="system" width="128" height="116"/>

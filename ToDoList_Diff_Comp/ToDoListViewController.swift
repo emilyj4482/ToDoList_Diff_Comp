@@ -8,21 +8,28 @@
 import UIKit
 
 class ToDoListViewController: UIViewController {
+
+    var vm = TaskViewModel.shared
     
-    @IBOutlet weak var navigationTitle: UINavigationItem!
-    @IBOutlet weak var doneButton: UIBarButtonItem!
+    var index: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
+        
+        if let index = index {
+            print(vm.lists[index])
+        }
+        
+        barButtons()
         
     }
     
-    
-    @IBAction func doneButtonTapped(_ sender: UIBarButtonItem) {
+    private func barButtons() {
         
     }
-
+    
+    @IBAction func addButtonTapped(_ sender: UIButton) {
+        print("add btn tapped")
+    }
+    
 }
