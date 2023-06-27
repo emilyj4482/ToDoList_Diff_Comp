@@ -288,6 +288,12 @@
                             <constraint firstItem="Ijr-zx-asd" firstAttribute="bottom" secondItem="YvV-YY-JqF" secondAttribute="bottom" constant="10" id="yUH-6q-1jX"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="addbutton" destination="YvV-YY-JqF" id="Qri-t0-1k0"/>
+                        <outlet property="collectionView" destination="p0P-bg-AWt" id="z4x-q9-V0y"/>
+                        <outlet property="textField" destination="B8b-NF-s7c" id="ARS-3P-eBc"/>
+                        <outlet property="tfView" destination="amR-q5-9nL" id="m4b-tA-fH0"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uGh-oW-pOh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
