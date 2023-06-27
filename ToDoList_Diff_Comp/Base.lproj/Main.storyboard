@@ -124,16 +124,48 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xm8-Pb-gyg">
-                                <rect key="frame" x="16" y="59" width="361" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uK0-24-DDg">
+                                <rect key="frame" x="15" y="15.000000000000004" width="77" height="34.333333333333343"/>
+                                <color key="tintColor" systemColor="systemPinkColor"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Cancel"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Cancel"/>
+                                <connections>
+                                    <action selector="cancelButtonTapped:" destination="DxW-VS-Nns" eventType="touchUpInside" id="yta-6r-pYZ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hdw-ol-NQW">
+                                <rect key="frame" x="313" y="15" width="65" height="35"/>
+                                <color key="tintColor" systemColor="systemPinkColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Done"/>
+                                <connections>
+                                    <action selector="doneButtonTapped:" destination="DxW-VS-Nns" eventType="touchUpInside" id="BK7-gk-546"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Untitled list" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xm8-Pb-gyg">
+                                <rect key="frame" x="25" y="69.333333333333329" width="343" height="43.666666666666671"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="35"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="hCx-cN-bkg"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="uK0-24-DDg" firstAttribute="leading" secondItem="hCx-cN-bkg" secondAttribute="leading" constant="15" id="6T2-kM-AOd"/>
+                            <constraint firstItem="hCx-cN-bkg" firstAttribute="trailing" secondItem="hdw-ol-NQW" secondAttribute="trailing" constant="15" id="8RW-eh-ax8"/>
+                            <constraint firstItem="hCx-cN-bkg" firstAttribute="trailing" secondItem="xm8-Pb-gyg" secondAttribute="trailing" constant="25" id="HTm-yW-cRs"/>
+                            <constraint firstItem="xm8-Pb-gyg" firstAttribute="top" secondItem="uK0-24-DDg" secondAttribute="bottom" constant="20" id="P9O-Td-tCh"/>
+                            <constraint firstItem="uK0-24-DDg" firstAttribute="top" secondItem="6BJ-TP-xNo" secondAttribute="top" constant="15" id="Yad-rl-KRL"/>
+                            <constraint firstItem="hdw-ol-NQW" firstAttribute="top" secondItem="6BJ-TP-xNo" secondAttribute="top" constant="15" id="niY-sA-35W"/>
+                            <constraint firstItem="xm8-Pb-gyg" firstAttribute="leading" secondItem="hCx-cN-bkg" secondAttribute="leading" constant="25" id="q2e-80-WxI"/>
+                            <constraint firstItem="xm8-Pb-gyg" firstAttribute="centerX" secondItem="hCx-cN-bkg" secondAttribute="centerX" id="w41-2S-Cwi"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="textField" destination="xm8-Pb-gyg" id="p7b-WV-OGP"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YoM-GC-GbV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

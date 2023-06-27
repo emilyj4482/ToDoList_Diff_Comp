@@ -12,11 +12,7 @@ class MainListViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var listCountLabel: UILabel!
     
-    // 임시 값
-    var lists: [List] = [
-        List(id: 1, name: "Important", tasks: [Task(id: 1, listId: 1, title: "important task", isDone: false, isImportant: true)]),
-        List(id: 2, name: "to study", tasks: [Task(id: 1, listId: 2, title: "iOS", isDone: false, isImportant: false)])
-    ]
+    var vm = TaskViewModel.shared
     
     // diffable data source 정의 : 단일 섹션
     enum Section {
@@ -25,8 +21,13 @@ class MainListViewController: UIViewController {
     typealias Item = List
     var datasource: UICollectionViewDiffableDataSource<Section, Item>!
     
+    var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // modal dismiss noti
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadCollectionView), name: NSNotification.Name(rawValue: "modalDismissed"), object: nil)
         
         datasource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, item in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ListCell", for: indexPath) as? ListCell else { return nil }
@@ -34,11 +35,8 @@ class MainListViewController: UIViewController {
             return cell
         })
         
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.main])
-        // 임시 값 주입
-        snapshot.appendItems(lists, toSection: .main)
-        datasource.apply(snapshot)
+        refreshSnapshot()
         
         collectionView.collectionViewLayout = layout()
         
@@ -60,9 +58,15 @@ class MainListViewController: UIViewController {
         return layout
     }
     
+    // snapshot에 data 적용
+    private func refreshSnapshot() {
+        snapshot.appendItems(vm.lists, toSection: .main)
+        datasource.apply(snapshot)
+    }
+    
     // list count label 뷰 적용
     func updateCountLabel() {
-        let count = lists.count - 1
+        let count = vm.lists.count - 1
         if count <= 1 {
             listCountLabel.text = "You have \(count) custom list."
         } else {
@@ -70,9 +74,16 @@ class MainListViewController: UIViewController {
         }
     }
 
-    
     @IBAction func addListButtonTapped(_ sender: UIButton) {
-        
+        guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "AddNewListViewController") as? AddNewListViewController else { return }
+        present(vc, animated: true)
+    }
+    
+    // collection view reload
+    @objc func reloadCollectionView() {
+        refreshSnapshot()
+        updateCountLabel()
+        print(vm.lists)
     }
     
 }
