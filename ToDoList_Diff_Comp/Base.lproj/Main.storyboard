@@ -238,7 +238,7 @@
                                 <rect key="frame" x="0.0" y="768" width="393" height="50"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="tU3-a9-ppl">
-                                        <rect key="frame" x="15" y="16" width="20" height="18.666666666666657"/>
+                                        <rect key="frame" x="15" y="15.999999999999998" width="20" height="18.666666666666664"/>
                                         <color key="tintColor" systemColor="systemPinkColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="tU3-a9-ppl" secondAttribute="height" multiplier="1:1" id="7F5-dk-dMM"/>
@@ -293,6 +293,7 @@
                         <outlet property="collectionView" destination="p0P-bg-AWt" id="z4x-q9-V0y"/>
                         <outlet property="textField" destination="B8b-NF-s7c" id="ARS-3P-eBc"/>
                         <outlet property="tfView" destination="amR-q5-9nL" id="m4b-tA-fH0"/>
+                        <outlet property="tfViewBottom" destination="WHJ-1z-CQz" id="Erd-hx-jIm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uGh-oW-pOh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -318,6 +319,7 @@
             <point key="canvasLocation" x="130.53435114503816" y="-27.464788732394368"/>
         </scene>
     </scenes>
+    <color key="tintColor" systemColor="systemPinkColor"/>
     <resources>
         <image name="circle" catalog="system" width="128" height="123"/>
         <image name="plus" catalog="system" width="128" height="113"/>
