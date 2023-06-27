@@ -29,6 +29,14 @@ class ToDoListViewController: UIViewController {
         }
     }
     
+    enum Section {
+        case main
+    }
+    typealias Item = Task
+    var datasource: UICollectionViewDiffableDataSource<Section, Item>!
+    
+    var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,6 +50,42 @@ class ToDoListViewController: UIViewController {
             addbutton.isHidden = true
             navigationItem.rightBarButtonItem?.isHidden = true
         }
+        
+        // 임시 값 주입
+        vm.lists[index].tasks.append(Task(id: 1, listId: vm.lists[index].id, title: "to study", isDone: false, isImportant: false))
+        vm.lists[index].tasks.append(Task(id: 2, listId: vm.lists[index].id, title: "to eat", isDone: true, isImportant: true))
+        
+        datasource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, item in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TaskCell", for: indexPath) as? TaskCell else { return nil }
+            cell.configure(item)
+            return cell
+        })
+        
+        snapshot.appendSections([.main])
+        snapshot.appendItems(vm.lists[index].tasks, toSection: .main)
+        datasource.apply(snapshot)
+        
+        collectionView.collectionViewLayout = layout()
+    }
+    
+    // 임시
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        vm.lists[index!].tasks = []
+    }
+    
+    private func layout() -> UICollectionViewCompositionalLayout {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        
+        return layout
     }
     
     @objc func rightButtonTapped() {

@@ -201,6 +201,7 @@
                                                     <color key="tintColor" systemColor="systemPinkColor"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" image="circle" catalog="system"/>
+                                                    <state key="selected" image="checkmark.circle" catalog="system"/>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="to study" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cgY-tE-yQK">
                                                     <rect key="frame" x="44.666666666666657" y="37.666666666666664" width="63" height="21"/>
@@ -213,6 +214,7 @@
                                                     <color key="tintColor" systemColor="systemYellowColor"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" image="star" catalog="system"/>
+                                                    <state key="selected" image="star.fill" catalog="system"/>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -238,7 +240,7 @@
                                 <rect key="frame" x="0.0" y="768" width="393" height="50"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="tU3-a9-ppl">
-                                        <rect key="frame" x="15" y="15.999999999999998" width="20" height="18.666666666666664"/>
+                                        <rect key="frame" x="15" y="16" width="20" height="18.666666666666657"/>
                                         <color key="tintColor" systemColor="systemPinkColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="tU3-a9-ppl" secondAttribute="height" multiplier="1:1" id="7F5-dk-dMM"/>
@@ -321,6 +323,7 @@
     </scenes>
     <color key="tintColor" systemColor="systemPinkColor"/>
     <resources>
+        <image name="checkmark.circle" catalog="system" width="128" height="123"/>
         <image name="circle" catalog="system" width="128" height="123"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="star" catalog="system" width="128" height="116"/>

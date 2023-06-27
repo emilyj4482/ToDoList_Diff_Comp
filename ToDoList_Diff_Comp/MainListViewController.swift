@@ -46,7 +46,6 @@ class MainListViewController: UIViewController {
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
-        
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
