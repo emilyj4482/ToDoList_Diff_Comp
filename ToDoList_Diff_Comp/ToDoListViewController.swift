@@ -10,12 +10,9 @@ import UIKit
 class ToDoListViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
-    
     @IBOutlet weak var tfView: UIView!
     @IBOutlet weak var addbutton: UIButton!
-    
     @IBOutlet weak var textField: UITextField!
-    
     @IBOutlet weak var tfViewBottom: NSLayoutConstraint!
     
     var vm = TaskViewModel.shared
@@ -54,6 +51,9 @@ class ToDoListViewController: UIViewController {
         // 임시 값 주입
         vm.lists[index].tasks.append(Task(id: 1, listId: vm.lists[index].id, title: "to study", isDone: false, isImportant: false))
         vm.lists[index].tasks.append(Task(id: 2, listId: vm.lists[index].id, title: "to eat", isDone: true, isImportant: true))
+        
+        // 키보드 감지
+        detectKeyboard()
         
         datasource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, item in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TaskCell", for: indexPath) as? TaskCell else { return nil }
@@ -117,5 +117,28 @@ extension ToDoListViewController {
             tfView.isHidden = true
             textField.resignFirstResponder()
         }
+    }
+    
+    // keyboard detection
+    func detectKeyboard() {
+        // 키보드가 나타나는 것 감지 >> keyboardWillShow 함수 호출
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        // 키보드가 사라지는 것 감지 >> keyboardWillHide 함수 호출
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc private func keyboardWillShow(notification: Notification) {
+        // keyboard 크기 > 높이 추출
+        guard let keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        let keyboardHeight = keyboardFrame.height
+        // 적용할 높이 = keyboard 높이 - safe area 높이
+        let adjustmentHeight = keyboardHeight - view.safeAreaInsets.bottom
+        // 적용할 높이만큼 textfield 영역 높임
+        tfViewBottom.constant = adjustmentHeight
+    }
+    
+    @objc private func keyboardWillHide(notification: Notification) {
+        // textfield 영역 높이 원점
+        tfViewBottom.constant = 0
     }
 }
