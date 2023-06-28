@@ -48,10 +48,6 @@ class ToDoListViewController: UIViewController {
             navigationItem.rightBarButtonItem?.isHidden = true
         }
         
-        // 임시 값 주입
-        vm.lists[index].tasks.append(Task(id: 1, listId: vm.lists[index].id, title: "to study", isDone: false, isImportant: false))
-        vm.lists[index].tasks.append(Task(id: 2, listId: vm.lists[index].id, title: "to eat", isDone: true, isImportant: true))
-        
         // 키보드 감지
         detectKeyboard()
         
@@ -62,16 +58,9 @@ class ToDoListViewController: UIViewController {
         })
         
         snapshot.appendSections([.main])
-        snapshot.appendItems(vm.lists[index].tasks, toSection: .main)
-        datasource.apply(snapshot)
+        refreshSnapshot()
         
         collectionView.collectionViewLayout = layout()
-    }
-    
-    // 임시
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        vm.lists[index!].tasks = []
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
@@ -88,10 +77,27 @@ class ToDoListViewController: UIViewController {
         return layout
     }
     
+    // snapshot에 data 적용
+    private func refreshSnapshot() {
+        snapshot.appendItems(vm.lists[index!].tasks, toSection: .main)
+        datasource.apply(snapshot)
+    }
+    
     @objc func rightButtonTapped() {
         print("right btn tapped")
+        // Done 버튼 tap 시 textfield 입력값으로 task 추가
+        guard let title = textField.text?.trim() else { return }
+        
+        if let index = index, !title.isEmpty {
+            let list = vm.lists[index]
+            vm.addTask(listId: list.id, vm.createTask(listId: list.id, title))
+        }
+        
         // test code
         addTaskMode = false
+        
+        print(vm.lists)
+        refreshSnapshot()
     }
     
     @IBAction func addButtonTapped(_ sender: UIButton) {
