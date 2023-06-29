@@ -35,7 +35,9 @@ class AddNewListViewController: UIViewController {
             newListName = "Untitled list"
         }
         vm.addList(vm.createList(newListName))
-
+        
+        print(vm.lists)
+        
         dismiss(animated: true)
     }
 }

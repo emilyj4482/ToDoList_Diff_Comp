@@ -36,7 +36,8 @@ class MainListViewController: UIViewController {
         })
         
         snapshot.appendSections([.main])
-        refreshSnapshot()
+        snapshot.appendItems(vm.lists, toSection: .main)
+        datasource.apply(snapshot)
         
         collectionView.collectionViewLayout = layout()
         
@@ -59,12 +60,6 @@ class MainListViewController: UIViewController {
         return layout
     }
     
-    // snapshot에 data 적용
-    private func refreshSnapshot() {
-        snapshot.appendItems(vm.lists, toSection: .main)
-        datasource.apply(snapshot)
-    }
-    
     // list count label 뷰 적용
     func updateCountLabel() {
         let count = vm.lists.count - 1
@@ -82,9 +77,9 @@ class MainListViewController: UIViewController {
     
     // collection view reload
     @objc func reloadCollectionView() {
-        refreshSnapshot()
+        snapshot.appendItems([vm.lists.last!], toSection: .main)
+        datasource.apply(snapshot)
         updateCountLabel()
-        print(vm.lists)
     }
     
 }

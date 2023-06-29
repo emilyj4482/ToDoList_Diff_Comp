@@ -58,7 +58,8 @@ class ToDoListViewController: UIViewController {
         })
         
         snapshot.appendSections([.main])
-        refreshSnapshot()
+        snapshot.appendItems(vm.lists[index].tasks, toSection: .main)
+        datasource.apply(snapshot)
         
         collectionView.collectionViewLayout = layout()
     }
@@ -77,31 +78,27 @@ class ToDoListViewController: UIViewController {
         return layout
     }
     
-    // snapshot에 data 적용
-    private func refreshSnapshot() {
-        snapshot.appendItems(vm.lists[index!].tasks, toSection: .main)
-        datasource.apply(snapshot)
-    }
-    
     @objc func rightButtonTapped() {
-        print("right btn tapped")
         // Done 버튼 tap 시 textfield 입력값으로 task 추가
         guard let title = textField.text?.trim() else { return }
         
         if let index = index, !title.isEmpty {
             let list = vm.lists[index]
-            vm.addTask(listId: list.id, vm.createTask(listId: list.id, title))
+            let task = vm.createTask(listId: list.id, title)
+            vm.addTask(listId: list.id, task)
+            
+            // reload collection view
+            snapshot.appendItems([task], toSection: .main)
+            datasource.apply(snapshot)
         }
         
         // test code
         addTaskMode = false
         
         print(vm.lists)
-        refreshSnapshot()
     }
     
     @IBAction func addButtonTapped(_ sender: UIButton) {
-        print("add btn tapped")
         // test code
         addTaskMode = true
     }
