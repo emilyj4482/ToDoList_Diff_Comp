@@ -52,8 +52,11 @@ class ToDoListViewController: UIViewController {
         detectKeyboard()
         
         datasource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, item in
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TaskCell", for: indexPath) as? TaskCell else { return nil }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TaskCell", for: indexPath) as? TaskCell else { return UICollectionViewCell() }
             cell.configure(item)
+            
+            // TODO: done & star 버튼 tap에 따른 데이터 변경 handler를 통해 적용
+            
             return cell
         })
         
@@ -143,5 +146,7 @@ extension ToDoListViewController {
     @objc private func keyboardWillHide(notification: Notification) {
         // textfield 영역 높이 원점
         tfViewBottom.constant = 0
+        // textfield 비우기
+        textField.text = ""
     }
 }
