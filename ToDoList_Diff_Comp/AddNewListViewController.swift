@@ -19,12 +19,6 @@ class AddNewListViewController: UIViewController {
         textField.becomeFirstResponder()
     }
     
-    // modal dismiss 직전 main에 noti
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.post(name: NSNotification.Name("modalDismissed"), object: nil)
-    }
-    
     @IBAction func cancelButtonTapped(_ sender: UIButton) {
         dismiss(animated: true)
     }
@@ -39,5 +33,8 @@ class AddNewListViewController: UIViewController {
         print(vm.lists)
         
         dismiss(animated: true)
+        
+        // Done button에 의하여 modal dismiss 시 main에 noti
+        NotificationCenter.default.post(name: NSNotification.Name("newListAdded"), object: nil)
     }
 }

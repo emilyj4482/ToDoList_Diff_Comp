@@ -27,7 +27,7 @@ class MainListViewController: UIViewController {
         super.viewDidLoad()
         
         // modal dismiss noti
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadCollectionView), name: NSNotification.Name(rawValue: "modalDismissed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadCollectionView), name: NSNotification.Name(rawValue: "newListAdded"), object: nil)
         
         datasource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, item in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ListCell", for: indexPath) as? ListCell else { return nil }
@@ -44,6 +44,13 @@ class MainListViewController: UIViewController {
         updateCountLabel()
         
         collectionView.delegate = self
+    }
+    
+    // test code
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        print(datasource.snapshot().itemIdentifiers)
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
@@ -75,7 +82,7 @@ class MainListViewController: UIViewController {
         present(vc, animated: true)
     }
     
-    // collection view reload
+    // new list 추가 시 collection view에 적용
     @objc func reloadCollectionView() {
         snapshot.appendItems([vm.lists.last!], toSection: .main)
         datasource.apply(snapshot)
