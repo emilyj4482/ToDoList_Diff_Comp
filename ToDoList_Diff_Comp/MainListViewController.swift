@@ -51,6 +51,9 @@ class MainListViewController: UIViewController {
         super.viewWillAppear(animated)
         
         print(datasource.snapshot().itemIdentifiers)
+        
+        // todo view에서 tasks 전달 받고 snapshot에 update 하기
+        
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {

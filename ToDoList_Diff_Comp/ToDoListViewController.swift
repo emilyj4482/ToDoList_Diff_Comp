@@ -67,6 +67,13 @@ class ToDoListViewController: UIViewController {
         collectionView.collectionViewLayout = layout()
     }
     
+    // main의 list.tasks에 현재 tasks 전달 >> main에서 받아서 snapshot에 update 및 count를 ui update
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        print("TASKS >>>>> \(snapshot.itemIdentifiers.count)")
+    }
+    
     private func layout() -> UICollectionViewCompositionalLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
