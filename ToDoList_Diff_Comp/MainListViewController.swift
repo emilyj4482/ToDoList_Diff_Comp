@@ -35,9 +35,7 @@ class MainListViewController: UIViewController {
             return cell
         })
         
-        snapshot.appendSections([.main])
-        snapshot.appendItems(vm.lists, toSection: .main)
-        datasource.apply(snapshot)
+        reload()
         
         collectionView.collectionViewLayout = layout()
         
@@ -50,10 +48,15 @@ class MainListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        print(datasource.snapshot().itemIdentifiers)
-        
-        // todo view에서 tasks 전달 받고 snapshot에 update 하기
-        
+        // 그냥 매번 snapshot을 새로 적용하는 게 나을 듯..
+        snapshot.deleteAllItems()
+        reload()
+    }
+    
+    private func reload() {
+        snapshot.appendSections([.main])
+        snapshot.appendItems(vm.lists, toSection: .main)
+        datasource.apply(snapshot)
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
