@@ -27,7 +27,7 @@ class MainListViewController: UIViewController {
         super.viewDidLoad()
         
         // modal dismiss noti
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadCollectionView), name: NSNotification.Name(rawValue: "modalDismissed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadCollectionView), name: NSNotification.Name(rawValue: "newListAdded"), object: nil)
         
         datasource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, item in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ListCell", for: indexPath) as? ListCell else { return nil }
@@ -35,16 +35,30 @@ class MainListViewController: UIViewController {
             return cell
         })
         
-        snapshot.appendSections([.main])
-        refreshSnapshot()
+        reload()
         
         collectionView.collectionViewLayout = layout()
         
         updateCountLabel()
+        
+        collectionView.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // todo list view에서 돌아올 때마다 view reload (데이터 수정사항 적용)
+        snapshot.deleteAllItems()
+        reload()
+    }
+    
+    // view reload
+    private func reload() {
+        snapshot.appendSections([.main])
+        snapshot.appendItems(vm.lists, toSection: .main)
+        datasource.apply(snapshot)
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
-        
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
@@ -56,12 +70,6 @@ class MainListViewController: UIViewController {
         let layout = UICollectionViewCompositionalLayout(section: section)
         
         return layout
-    }
-    
-    // snapshot에 data 적용
-    private func refreshSnapshot() {
-        snapshot.appendItems(vm.lists, toSection: .main)
-        datasource.apply(snapshot)
     }
     
     // list count label 뷰 적용
@@ -79,12 +87,24 @@ class MainListViewController: UIViewController {
         present(vc, animated: true)
     }
     
-    // collection view reload
+    // new list 추가 시 collection view에 적용
     @objc func reloadCollectionView() {
-        refreshSnapshot()
+        snapshot.appendItems([vm.lists.last!], toSection: .main)
+        datasource.apply(snapshot)
         updateCountLabel()
-        print(vm.lists)
     }
     
 }
 
+extension MainListViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let list = vm.lists[indexPath.item]
+        
+        guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "ToDoListViewController") as? ToDoListViewController else { return }
+        
+        vc.title = list.name
+        vc.index = indexPath.item
+        
+        navigationController?.pushViewController(vc, animated: true)
+    }
+}

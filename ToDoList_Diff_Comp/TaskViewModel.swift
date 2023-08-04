@@ -44,6 +44,19 @@ class TaskViewModel {
     func addList(_ list: List) {
         lists.append(list)
     }
+    
+    // Task 내용은 중복 허용(검사 X), 입력값에 대해 앞뒤 공백을 제거해준 뒤 생성한다.
+    func createTask(listId: Int, _ title: String) -> Task {
+        let nextId = lastTaskId + 1
+        lastTaskId = nextId
+        return Task(id: nextId, listId: listId, title: title.trim(), isDone: false, isImportant: false)
+    }
+    
+    func addTask(listId: Int, _ task: Task) {
+        if let index = lists.firstIndex(where: { $0.id == listId }) {
+            lists[index].tasks.append(task)
+        }
+    }
 }
 
 // 문자열 앞뒤 공백 삭제 메소드 정의
