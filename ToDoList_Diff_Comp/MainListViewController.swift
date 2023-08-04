@@ -44,15 +44,14 @@ class MainListViewController: UIViewController {
         collectionView.delegate = self
     }
     
-    // test code
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // 그냥 매번 snapshot을 새로 적용하는 게 나을 듯..
+        // todo list view에서 돌아올 때마다 view reload (데이터 수정사항 적용)
         snapshot.deleteAllItems()
         reload()
     }
     
+    // view reload
     private func reload() {
         snapshot.appendSections([.main])
         snapshot.appendItems(vm.lists, toSection: .main)
