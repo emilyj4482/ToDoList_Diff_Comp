@@ -17,6 +17,7 @@ class TaskCell: UICollectionViewCell {
     
     func configure(_ task: Task) {
         doneButton.isSelected = task.isDone
+        taskLabelStyle(task.isDone)
         taskLabel.text = task.title
         starButton.isSelected = task.isImportant
     }

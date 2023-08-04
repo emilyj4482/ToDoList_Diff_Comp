@@ -55,18 +55,20 @@ class ToDoListViewController: UIViewController {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TaskCell", for: indexPath) as? TaskCell else { return UICollectionViewCell() }
             cell.configure(item)
             
-            // TODO: done & star 버튼 tap에 따른 데이터 변경
+            // done & star 버튼 tap에 따른 데이터 변경
             var task = self.vm.lists[index].tasks[indexPath.item]
             
             cell.doneButtonTapHandler = { isDone in
                 task.isDone = isDone
-                print(task)
+                self.vm.updateTaskComplete(task)
             }
             
             cell.starButtonTapHandler = { isImportant in
                 task.isImportant = isImportant
-                print(task)
+                self.vm.updateImportant(task)
             }
+            
+            // TODO: important list에서 star button tap 시 task 사라지도록 처리 (view reload)
             
             return cell
         })

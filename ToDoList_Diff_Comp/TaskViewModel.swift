@@ -57,6 +57,34 @@ class TaskViewModel {
             lists[index].tasks.append(task)
         }
     }
+    
+    // important task인 경우 Important list와 속한 list 양쪽에서 업데이트 필요
+    func updateTaskComplete(_ task: Task) {
+        if task.isImportant {
+            updateSingleTask(listId: 1, taskId: task.id, task: task)
+        }
+        updateSingleTask(listId: task.listId, taskId: task.id, task: task)
+    }
+    
+    private func updateSingleTask(listId: Int, taskId: Int, task: Task) {
+        if let index1 = lists.firstIndex(where: { $0.id == listId }) {
+            if let index2 = lists[index1].tasks.firstIndex(where: { $0.id == taskId }) {
+                lists[index1].tasks[index2].update(title: task.title, isDone: task.isDone, isImportant: task.isImportant)
+            }
+        }
+    }
+    
+    // isImportant update : Important list로의 추가/삭제 함께 동작 필요
+    func updateImportant(_ task: Task) {
+        if task.isImportant {
+            lists[0].tasks.append(task)
+        } else {
+            if let index = lists[0].tasks.firstIndex(where: { $0.id == task.id }) {
+                lists[0].tasks.remove(at: index)
+            }
+        }
+        updateSingleTask(listId: task.listId, taskId: task.id, task: task)
+    }
 }
 
 // 문자열 앞뒤 공백 삭제 메소드 정의
