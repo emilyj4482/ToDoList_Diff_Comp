@@ -96,9 +96,19 @@ class ToDoListViewController: UIViewController {
     }
     
     // important list에서 star button tap 시 task 사라지도록 처리 (view reload)
-    @objc func starButtonTapped() {
-        guard let index = index, index == 0 else { return }
-        print("star btn tapped")
+    @objc func starButtonTapped(_ noti: Notification) {
+        guard
+            let index = index,
+            index == 0,
+            let isImportant = noti.object as? Bool,
+            isImportant == false
+        else { return }
+        
+        // TODO: important tasks 순서 다른 앱들도 그런 지 확인하기
+        snapshot.deleteAllItems()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(vm.lists[index].tasks, toSection: .main)
+        datasource.apply(snapshot)
         
     }
     
