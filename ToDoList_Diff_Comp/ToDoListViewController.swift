@@ -48,6 +48,9 @@ class ToDoListViewController: UIViewController {
             navigationItem.rightBarButtonItem?.isHidden = true
         }
         
+        // star button tap noti
+        NotificationCenter.default.addObserver(self, selector: #selector(starButtonTapped), name: NSNotification.Name(rawValue: "starButtonTapped"), object: nil)
+        
         // 키보드 감지
         detectKeyboard()
         
@@ -67,8 +70,6 @@ class ToDoListViewController: UIViewController {
                 task.isImportant = isImportant
                 self.vm.updateImportant(task)
             }
-            
-            // TODO: important list에서 star button tap 시 task 사라지도록 처리 (view reload)
             
             return cell
         })
@@ -92,6 +93,13 @@ class ToDoListViewController: UIViewController {
         let layout = UICollectionViewCompositionalLayout(section: section)
         
         return layout
+    }
+    
+    // important list에서 star button tap 시 task 사라지도록 처리 (view reload)
+    @objc func starButtonTapped() {
+        guard let index = index, index == 0 else { return }
+        print("star btn tapped")
+        
     }
     
     @objc func rightButtonTapped() {

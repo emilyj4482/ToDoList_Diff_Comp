@@ -35,6 +35,10 @@ class TaskCell: UICollectionViewCell {
         
         // 데이터 변동 : starButtonHandler에 isImportant 여부 전송
         starButtonTapHandler?(starButton.isSelected)
+        
+        // noti post
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "starButtonTapped"), object: nil)
+
     }
     
     // isDone 상태에 따라 task 글자 취소선, 흐리게 처리
