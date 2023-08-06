@@ -103,8 +103,7 @@ class ToDoListViewController: UIViewController {
             let isImportant = noti.object as? Bool,
             isImportant == false
         else { return }
-        
-        // TODO: important tasks 순서 다른 앱들도 그런 지 확인하기
+
         snapshot.deleteAllItems()
         snapshot.appendSections([.main])
         snapshot.appendItems(vm.lists[index].tasks, toSection: .main)
@@ -112,28 +111,38 @@ class ToDoListViewController: UIViewController {
         
     }
     
+    /*
+     우측 상단 button : Edit or Done
+     Edit : list 이름 수정
+     Done : task 추가
+    */
     @objc func rightButtonTapped() {
-        // Done 버튼 tap 시 textfield 입력값으로 task 추가
-        guard let title = textField.text?.trim() else { return }
-        
-        if let index = index, !title.isEmpty {
-            let list = vm.lists[index]
-            let task = vm.createTask(listId: list.id, title)
-            vm.addTask(listId: list.id, task)
+        // add task mode true = Done
+        // >> textfield 입력값으로 task 추가
+        if addTaskMode == true {
+            guard let title = textField.text?.trim() else { return }
             
-            // reload collection view
-            snapshot.appendItems([task], toSection: .main)
-            datasource.apply(snapshot)
+            if let index = index, !title.isEmpty {
+                let list = vm.lists[index]
+                let task = vm.createTask(listId: list.id, title)
+                vm.addTask(listId: list.id, task)
+                
+                // reload collection view
+                snapshot.appendItems([task], toSection: .main)
+                datasource.apply(snapshot)
+            }
+            
+            addTaskMode = false
+            
+            print(vm.lists)
+        } else {
+            // add task mode false = Edit
+            // TODO: alert 창을 이용하여 list name update 기능 구현하기
+            print("EDIT LIST NAME MODE")
         }
-        
-        // test code
-        addTaskMode = false
-        
-        print(vm.lists)
     }
     
     @IBAction func addButtonTapped(_ sender: UIButton) {
-        // test code
         addTaskMode = true
     }
     
@@ -147,7 +156,6 @@ extension ToDoListViewController {
             addbutton.isHidden = true
             tfView.isHidden = false
             textField.becomeFirstResponder()
-            
         } else {
             navigationItem.rightBarButtonItem?.title = "Edit"
             addbutton.isHidden = false
