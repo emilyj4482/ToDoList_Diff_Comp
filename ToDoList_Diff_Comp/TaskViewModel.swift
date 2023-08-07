@@ -85,6 +85,12 @@ class TaskViewModel {
         }
         updateSingleTask(listId: task.listId, taskId: task.id, task: task)
     }
+    
+    func updateList(listId: Int, _ name: String) {
+        if let index = lists.firstIndex(where: { $0.id == listId }) {
+            lists[index].update(name: name)
+        }
+    }
 }
 
 // 문자열 앞뒤 공백 삭제 메소드 정의

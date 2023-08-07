@@ -117,13 +117,15 @@ class ToDoListViewController: UIViewController {
      Done : task 추가
     */
     @objc func rightButtonTapped() {
+        guard let index = index else { return }
+        let list = vm.lists[index]
+        
         // add task mode true = Done
         // >> textfield 입력값으로 task 추가
         if addTaskMode == true {
             guard let title = textField.text?.trim() else { return }
             
-            if let index = index, !title.isEmpty {
-                let list = vm.lists[index]
+            if !title.isEmpty {
                 let task = vm.createTask(listId: list.id, title)
                 vm.addTask(listId: list.id, task)
                 
@@ -137,8 +139,21 @@ class ToDoListViewController: UIViewController {
             print(vm.lists)
         } else {
             // add task mode false = Edit
-            // TODO: alert 창을 이용하여 list name update 기능 구현하기
-            print("EDIT LIST NAME MODE")
+            // >> textfield를 가진 alert 창을 띄워 list 이름 수정 기능 제공
+            let editAlert = UIAlertController(title: "Type your new list name down below.", message: "", preferredStyle: .alert)
+            
+            let btnCancel = UIAlertAction(title: "Cancel", style: .cancel)
+            let btnDone = UIAlertAction(title: "Done", style: .default)
+            
+            editAlert.addTextField { tf in
+                tf.placeholder = list.name
+            }
+            editAlert.addAction(btnCancel)
+            editAlert.addAction(btnDone)
+            
+            present(editAlert, animated: true)
+            
+            // TODO: textfield 입력값 받아서 action 하는 방법 알아내서 적용하기
         }
     }
     
