@@ -144,8 +144,9 @@ class ToDoListViewController: UIViewController {
             
             let btnCancel = UIAlertAction(title: "Cancel", style: .cancel)
             let btnDone = UIAlertAction(title: "Done", style: .default, handler: { _ in
-                guard let tfArray = editAlert.textFields, let tfText = tfArray[0].text else { return }
-                print(tfText)
+                guard let tfText = editAlert.textFields?[0].text else { return }
+                self.vm.updateList(listId: list.id, tfText)
+                self.navigationItem.title = tfText
             })
             
             editAlert.addTextField { tf in
@@ -155,8 +156,6 @@ class ToDoListViewController: UIViewController {
             editAlert.addAction(btnDone)
             
             present(editAlert, animated: true)
-            
-            // TODO: textfield 입력값 받아서 action 하는 방법 알아내서 적용하기
         }
     }
     
