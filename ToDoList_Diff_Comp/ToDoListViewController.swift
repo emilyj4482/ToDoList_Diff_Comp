@@ -143,7 +143,10 @@ class ToDoListViewController: UIViewController {
             let editAlert = UIAlertController(title: "Type your new list name down below.", message: "", preferredStyle: .alert)
             
             let btnCancel = UIAlertAction(title: "Cancel", style: .cancel)
-            let btnDone = UIAlertAction(title: "Done", style: .default)
+            let btnDone = UIAlertAction(title: "Done", style: .default, handler: { _ in
+                guard let tfArray = editAlert.textFields, let tfText = tfArray[0].text else { return }
+                print(tfText)
+            })
             
             editAlert.addTextField { tf in
                 tf.placeholder = list.name
