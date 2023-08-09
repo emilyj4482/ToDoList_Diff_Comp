@@ -80,13 +80,17 @@ class MainListViewController: UIViewController {
         */
         
         // swipe to delete
+        // TODO: important list swipe 불가 처리
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.showsSeparators = false
         config.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
             let item = self.datasource.itemIdentifier(for: indexPath)
-            let action = UIContextualAction(style: .normal, title: "TEST") { action, view, completion in
-                print("TEST")
-                // completion(true)
+            let action = UIContextualAction(style: .destructive, title: "DELETE") { _, _, _ in
+                guard let item = item else { return }
+                self.vm.deleteList(listId: item.id)
+                self.snapshot.deleteItems([item])
+                self.datasource.apply(self.snapshot)
+                print("\(self.vm.lists)")
             }
             return UISwipeActionsConfiguration(actions: [action])
         }

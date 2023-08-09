@@ -91,6 +91,12 @@ class TaskViewModel {
             lists[index].update(name: name)
         }
     }
+    
+    func deleteList(listId: Int) {
+        if let index = lists.firstIndex(where: { $0.id == listId }) {
+            lists.remove(at: index)
+        }
+    }
 }
 
 // 문자열 앞뒤 공백 삭제 메소드 정의
