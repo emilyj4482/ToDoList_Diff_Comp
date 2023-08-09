@@ -58,20 +58,6 @@ class MainListViewController: UIViewController {
         datasource.apply(snapshot)
     }
     
-    private func layout() -> UICollectionViewCompositionalLayout {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-        
-        let section = NSCollectionLayoutSection(group: group)
-        
-        let layout = UICollectionViewCompositionalLayout(section: section)
-        
-        return layout
-    }
-    
     // list count label 뷰 적용
     func updateCountLabel() {
         let count = vm.lists.count - 1
@@ -80,6 +66,31 @@ class MainListViewController: UIViewController {
         } else {
             listCountLabel.text = "You have \(count) custom lists."
         }
+    }
+    
+    private func layout() -> UICollectionViewCompositionalLayout {
+        
+        /* swipe action을 쓰려면 얘는 쓸 수가 없나보다..
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        */
+        
+        // swipe to delete
+        var config = UICollectionLayoutListConfiguration(appearance: .plain)
+        config.showsSeparators = false
+        config.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
+            let item = self.datasource.itemIdentifier(for: indexPath)
+            let action = UIContextualAction(style: .normal, title: "TEST") { action, view, completion in
+                print("TEST")
+                // completion(true)
+            }
+            return UISwipeActionsConfiguration(actions: [action])
+        }
+        return UICollectionViewCompositionalLayout.list(using: config)
     }
 
     @IBAction func addListButtonTapped(_ sender: UIButton) {
