@@ -97,6 +97,22 @@ class TaskViewModel {
             lists.remove(at: index)
         }
     }
+    
+    // important task인 경우 Important list와 속한 list 양쪽에서 삭제 처리 필요
+    func deleteTaskComplete(_ task: Task) {
+        if task.isImportant {
+            deleteSingleTask(listId: 1, taskId: task.id)
+        }
+        deleteSingleTask(listId: task.listId, taskId: task.id)
+    }
+    
+    private func deleteSingleTask(listId: Int, taskId: Int) {
+        if let index1 = lists.firstIndex(where: { $0.id == listId }) {
+            if let index2 = lists[index1].tasks.firstIndex(where: { $0.id == taskId }) {
+                lists[index1].tasks.remove(at: index2)
+            }
+        }
+    }
 }
 
 // 문자열 앞뒤 공백 삭제 메소드 정의

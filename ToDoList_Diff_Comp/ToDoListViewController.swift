@@ -92,7 +92,7 @@ class ToDoListViewController: UIViewController {
         return layout
         */
         
-        // swipe to delete
+        // swipe to update & delete
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.showsSeparators = false
         config.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
@@ -101,7 +101,10 @@ class ToDoListViewController: UIViewController {
                 print("update action")
             }
             let deleteAction = UIContextualAction(style: .destructive, title: "DELETE") { _, _, _ in
-                print("delete action")
+                guard let item = item else { return }
+                self.vm.deleteTaskComplete(item)
+                self.snapshot.deleteItems([item])
+                self.datasource.apply(self.snapshot)
             }
             return UISwipeActionsConfiguration(actions: [updateAction, deleteAction])
         }
@@ -121,7 +124,6 @@ class ToDoListViewController: UIViewController {
         snapshot.appendSections([.main])
         snapshot.appendItems(vm.lists[index].tasks, toSection: .main)
         datasource.apply(snapshot)
-        
     }
     
     /*
