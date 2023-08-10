@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A11764312A49D16C00A54ABE /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11764302A49D16C00A54ABE /* TaskViewModel.swift */; };
+		A12791AB2A8552D00094907F /* TaskDoneHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12791AA2A8552D00094907F /* TaskDoneHeader.swift */; };
 		A1B682272A45C84200BAC12A /* AddNewListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B682262A45C84200BAC12A /* AddNewListViewController.swift */; };
 		A1B682292A45C84F00BAC12A /* ToDoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B682282A45C84F00BAC12A /* ToDoListViewController.swift */; };
 		A1B6822B2A45C87900BAC12A /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B6822A2A45C87900BAC12A /* ListCell.swift */; };
@@ -23,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		A11764302A49D16C00A54ABE /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
+		A12791AA2A8552D00094907F /* TaskDoneHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDoneHeader.swift; sourceTree = "<group>"; };
 		A1B682262A45C84200BAC12A /* AddNewListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewListViewController.swift; sourceTree = "<group>"; };
 		A1B682282A45C84F00BAC12A /* ToDoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListViewController.swift; sourceTree = "<group>"; };
 		A1B6822A2A45C87900BAC12A /* ListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 				A1BC23112A45830C00C5D9BA /* Main.storyboard */,
 				A1B6822A2A45C87900BAC12A /* ListCell.swift */,
 				A1B6822C2A45C88400BAC12A /* TaskCell.swift */,
+				A12791AA2A8552D00094907F /* TaskDoneHeader.swift */,
 				A1BC23142A45830D00C5D9BA /* Assets.xcassets */,
 				A1BC23162A45830D00C5D9BA /* LaunchScreen.storyboard */,
 				A1BC23192A45830D00C5D9BA /* Info.plist */,
@@ -161,6 +164,7 @@
 				A1B6822D2A45C88400BAC12A /* TaskCell.swift in Sources */,
 				A1BC230C2A45830C00C5D9BA /* AppDelegate.swift in Sources */,
 				A1BC230E2A45830C00C5D9BA /* SceneDelegate.swift in Sources */,
+				A12791AB2A8552D00094907F /* TaskDoneHeader.swift in Sources */,
 				A1B6822B2A45C87900BAC12A /* ListCell.swift in Sources */,
 				A1B682292A45C84F00BAC12A /* ToDoListViewController.swift in Sources */,
 				A11764312A49D16C00A54ABE /* TaskViewModel.swift in Sources */,

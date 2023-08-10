@@ -79,6 +79,15 @@ class ToDoListViewController: UIViewController {
         datasource.apply(snapshot)
         
         collectionView.collectionViewLayout = layout()
+        
+        // header
+        // TODO: view에 보이도록 설정 완료하기
+        // TODO: 일반 list에서 task important 한 뒤 task 삭제하면 important list에서는 삭제되지 않고 남아있는 현상 >> 다른 앱들도 그런지 확인
+        collectionView.register(TaskDoneHeader.self, forSupplementaryViewOfKind: "TaskDoneHeader", withReuseIdentifier: "TaskDoneHeader")
+        datasource.supplementaryViewProvider = { (collectionView, kind, indexPath) -> UICollectionReusableView in
+            guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "TaskDoneHeader", for: indexPath) as? TaskDoneHeader else { return UICollectionReusableView() }
+            return header
+        }
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
