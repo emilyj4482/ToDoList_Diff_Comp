@@ -70,15 +70,6 @@ class MainListViewController: UIViewController {
     
     private func layout() -> UICollectionViewCompositionalLayout {
         
-        /* swipe action을 쓰려면 얘는 쓸 수가 없나보다..
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-        let section = NSCollectionLayoutSection(group: group)
-        let layout = UICollectionViewCompositionalLayout(section: section)
-        */
-        
         // swipe to delete
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.showsSeparators = false

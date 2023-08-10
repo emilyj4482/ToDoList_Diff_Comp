@@ -82,24 +82,33 @@ class ToDoListViewController: UIViewController {
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
-        /*
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-        let section = NSCollectionLayoutSection(group: group)
-        let layout = UICollectionViewCompositionalLayout(section: section)
-        return layout
-        */
         
         // swipe to update & delete
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.showsSeparators = false
         config.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
-            let item = self.datasource.itemIdentifier(for: indexPath)
-            let updateAction = UIContextualAction(style: .normal, title: "UPDATE") { _, _, _ in
-                print("update action")
+            var item = self.datasource.itemIdentifier(for: indexPath)
+            let updateAction = UIContextualAction(style: .normal, title: "EDIT") { _, _, completion in
+                // textfield를 가진 alert 창을 띄워 task 이름 수정 기능 제공
+                let editAlert = UIAlertController(title: "Modifying task?", message: "", preferredStyle: .alert)
+                let btnCancel = UIAlertAction(title: "Cancel", style: .cancel)
+                let btnDone = UIAlertAction(title: "Done", style: .default, handler: { _ in
+                    guard let tfText = editAlert.textFields?[0].text else { return }
+                    item?.title = tfText
+                    guard let item = item else { return }
+                    self.vm.updateTaskComplete(item)
+                    completion(true)
+                    self.reload()
+                })
+                editAlert.addTextField { tf in
+                    tf.placeholder = item?.title
+                }
+                editAlert.addAction(btnCancel)
+                editAlert.addAction(btnDone)
+                
+                self.present(editAlert, animated: true)
             }
+            
             let deleteAction = UIContextualAction(style: .destructive, title: "DELETE") { _, _, _ in
                 guard let item = item else { return }
                 self.vm.deleteTaskComplete(item)
@@ -120,6 +129,12 @@ class ToDoListViewController: UIViewController {
             isImportant == false
         else { return }
 
+        reload()
+    }
+    
+    // view reload
+    private func reload() {
+        guard let index = index else { return }
         snapshot.deleteAllItems()
         snapshot.appendSections([.main])
         snapshot.appendItems(vm.lists[index].tasks, toSection: .main)
@@ -156,7 +171,6 @@ class ToDoListViewController: UIViewController {
             // add task mode false = Edit
             // >> textfield를 가진 alert 창을 띄워 list 이름 수정 기능 제공
             let editAlert = UIAlertController(title: "Type your new list name down below.", message: "", preferredStyle: .alert)
-            
             let btnCancel = UIAlertAction(title: "Cancel", style: .cancel)
             let btnDone = UIAlertAction(title: "Done", style: .default, handler: { _ in
                 guard let tfText = editAlert.textFields?[0].text else { return }
