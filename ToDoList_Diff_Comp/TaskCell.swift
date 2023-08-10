@@ -17,6 +17,7 @@ class TaskCell: UICollectionViewCell {
     
     func configure(_ task: Task) {
         doneButton.isSelected = task.isDone
+        taskLabelStyle(task.isDone)
         taskLabel.text = task.title
         starButton.isSelected = task.isImportant
     }
@@ -34,6 +35,10 @@ class TaskCell: UICollectionViewCell {
         
         // 데이터 변동 : starButtonHandler에 isImportant 여부 전송
         starButtonTapHandler?(starButton.isSelected)
+        
+        // noti post : 변동 된 isImportant 값 noti와 함께 전송
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "starButtonTapped"), object: starButton.isSelected)
+
     }
     
     // isDone 상태에 따라 task 글자 취소선, 흐리게 처리

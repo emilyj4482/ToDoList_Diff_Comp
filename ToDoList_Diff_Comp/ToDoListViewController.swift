@@ -48,6 +48,9 @@ class ToDoListViewController: UIViewController {
             navigationItem.rightBarButtonItem?.isHidden = true
         }
         
+        // star button tap noti
+        NotificationCenter.default.addObserver(self, selector: #selector(starButtonTapped), name: NSNotification.Name(rawValue: "starButtonTapped"), object: nil)
+        
         // 키보드 감지
         detectKeyboard()
         
@@ -55,7 +58,18 @@ class ToDoListViewController: UIViewController {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TaskCell", for: indexPath) as? TaskCell else { return UICollectionViewCell() }
             cell.configure(item)
             
-            // TODO: done & star 버튼 tap에 따른 데이터 변경 handler를 통해 적용
+            // done & star 버튼 tap에 따른 데이터 변경
+            var task = self.vm.lists[index].tasks[indexPath.item]
+            
+            cell.doneButtonTapHandler = { isDone in
+                task.isDone = isDone
+                self.vm.updateTaskComplete(task)
+            }
+            
+            cell.starButtonTapHandler = { isImportant in
+                task.isImportant = isImportant
+                self.vm.updateImportant(task)
+            }
             
             return cell
         })
@@ -68,41 +82,113 @@ class ToDoListViewController: UIViewController {
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-        
-        let section = NSCollectionLayoutSection(group: group)
-        
-        let layout = UICollectionViewCompositionalLayout(section: section)
-        
-        return layout
+        // swipe to update & delete
+        var config = UICollectionLayoutListConfiguration(appearance: .plain)
+        config.showsSeparators = false
+        config.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
+            var item = self.datasource.itemIdentifier(for: indexPath)
+            let updateAction = UIContextualAction(style: .normal, title: "EDIT") { _, _, completion in
+                // textfield를 가진 alert 창을 띄워 task 이름 수정 기능 제공
+                let editAlert = UIAlertController(title: "Modifying task?", message: "", preferredStyle: .alert)
+                let btnCancel = UIAlertAction(title: "Cancel", style: .cancel)
+                let btnDone = UIAlertAction(title: "Done", style: .default, handler: { _ in
+                    guard let tfText = editAlert.textFields?[0].text else { return }
+                    item?.title = tfText
+                    guard let item = item else { return }
+                    self.vm.updateTaskComplete(item)
+                    completion(true)
+                    self.reload()
+                })
+                editAlert.addTextField { tf in
+                    tf.placeholder = item?.title
+                }
+                editAlert.addAction(btnCancel)
+                editAlert.addAction(btnDone)
+                
+                self.present(editAlert, animated: true)
+            }
+            
+            let deleteAction = UIContextualAction(style: .destructive, title: "DELETE") { _, _, _ in
+                guard let item = item else { return }
+                self.vm.deleteTaskComplete(item)
+                self.snapshot.deleteItems([item])
+                self.datasource.apply(self.snapshot)
+            }
+            return UISwipeActionsConfiguration(actions: [updateAction, deleteAction])
+        }
+        return UICollectionViewCompositionalLayout.list(using: config)
     }
     
+    // important list에서 star button tap 시 task 사라지도록 처리 (view reload)
+    @objc func starButtonTapped(_ noti: Notification) {
+        guard
+            let index = index,
+            index == 0,
+            let isImportant = noti.object as? Bool,
+            isImportant == false
+        else { return }
+
+        reload()
+    }
+    
+    // view reload
+    private func reload() {
+        guard let index = index else { return }
+        snapshot.deleteAllItems()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(vm.lists[index].tasks, toSection: .main)
+        datasource.apply(snapshot)
+    }
+    
+    /*
+     우측 상단 button : Edit or Done
+     Edit : list 이름 수정
+     Done : task 추가
+    */
     @objc func rightButtonTapped() {
-        // Done 버튼 tap 시 textfield 입력값으로 task 추가
-        guard let title = textField.text?.trim() else { return }
+        guard let index = index else { return }
+        let list = vm.lists[index]
         
-        if let index = index, !title.isEmpty {
-            let list = vm.lists[index]
-            let task = vm.createTask(listId: list.id, title)
-            vm.addTask(listId: list.id, task)
+        // add task mode true = Done
+        // >> textfield 입력값으로 task 추가
+        if addTaskMode == true {
+            guard let title = textField.text?.trim() else { return }
             
-            // reload collection view
-            snapshot.appendItems([task], toSection: .main)
-            datasource.apply(snapshot)
+            if !title.isEmpty {
+                let task = vm.createTask(listId: list.id, title)
+                vm.addTask(listId: list.id, task)
+                
+                // reload collection view
+                snapshot.appendItems([task], toSection: .main)
+                datasource.apply(snapshot)
+            }
+            
+            addTaskMode = false
+            
+            print(vm.lists)
+        } else {
+            // add task mode false = Edit
+            // >> textfield를 가진 alert 창을 띄워 list 이름 수정 기능 제공
+            let editAlert = UIAlertController(title: "Type your new list name down below.", message: "", preferredStyle: .alert)
+            let btnCancel = UIAlertAction(title: "Cancel", style: .cancel)
+            let btnDone = UIAlertAction(title: "Done", style: .default, handler: { _ in
+                guard let tfText = editAlert.textFields?[0].text else { return }
+                self.vm.updateList(listId: list.id, tfText)
+                self.navigationItem.title = tfText
+            })
+            
+            editAlert.addTextField { tf in
+                tf.placeholder = list.name
+            }
+            editAlert.addAction(btnCancel)
+            editAlert.addAction(btnDone)
+            
+            present(editAlert, animated: true)
         }
-        
-        // test code
-        addTaskMode = false
-        
-        print(vm.lists)
     }
     
     @IBAction func addButtonTapped(_ sender: UIButton) {
-        // test code
         addTaskMode = true
     }
     
@@ -116,7 +202,6 @@ extension ToDoListViewController {
             addbutton.isHidden = true
             tfView.isHidden = false
             textField.becomeFirstResponder()
-            
         } else {
             navigationItem.rightBarButtonItem?.title = "Edit"
             addbutton.isHidden = false
