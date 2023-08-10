@@ -82,17 +82,30 @@ class ToDoListViewController: UIViewController {
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
+        /*
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-        
         let section = NSCollectionLayoutSection(group: group)
-        
         let layout = UICollectionViewCompositionalLayout(section: section)
-        
         return layout
+        */
+        
+        // swipe to delete
+        var config = UICollectionLayoutListConfiguration(appearance: .plain)
+        config.showsSeparators = false
+        config.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
+            let item = self.datasource.itemIdentifier(for: indexPath)
+            let updateAction = UIContextualAction(style: .normal, title: "UPDATE") { _, _, _ in
+                print("update action")
+            }
+            let deleteAction = UIContextualAction(style: .destructive, title: "DELETE") { _, _, _ in
+                print("delete action")
+            }
+            return UISwipeActionsConfiguration(actions: [updateAction, deleteAction])
+        }
+        return UICollectionViewCompositionalLayout.list(using: config)
     }
     
     // important list에서 star button tap 시 task 사라지도록 처리 (view reload)
