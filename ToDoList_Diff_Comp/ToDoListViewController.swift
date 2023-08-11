@@ -82,7 +82,6 @@ class ToDoListViewController: UIViewController {
         
         // header
         // TODO: view에 보이도록 설정 완료하기
-        // TODO: 일반 list에서 task important 한 뒤 task 삭제하면 important list에서는 삭제되지 않고 남아있는 현상 >> 다른 앱들도 그런지 확인
         collectionView.register(TaskDoneHeader.self, forSupplementaryViewOfKind: "TaskDoneHeader", withReuseIdentifier: "TaskDoneHeader")
         datasource.supplementaryViewProvider = { (collectionView, kind, indexPath) -> UICollectionReusableView in
             guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "TaskDoneHeader", for: indexPath) as? TaskDoneHeader else { return UICollectionReusableView() }
@@ -100,7 +99,9 @@ class ToDoListViewController: UIViewController {
             let updateAction = UIContextualAction(style: .normal, title: "EDIT") { _, _, completion in
                 // textfield를 가진 alert 창을 띄워 task 이름 수정 기능 제공
                 let editAlert = UIAlertController(title: "Modifying task?", message: "", preferredStyle: .alert)
-                let btnCancel = UIAlertAction(title: "Cancel", style: .cancel)
+                let btnCancel = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+                    completion(true)
+                }
                 let btnDone = UIAlertAction(title: "Done", style: .default, handler: { _ in
                     guard let tfText = editAlert.textFields?[0].text else { return }
                     item?.title = tfText
