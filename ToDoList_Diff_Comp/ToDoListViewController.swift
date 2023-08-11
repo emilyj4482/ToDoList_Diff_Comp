@@ -81,7 +81,6 @@ class ToDoListViewController: UIViewController {
         collectionView.collectionViewLayout = layout()
         
         // header
-        // TODO: view에 보이도록 설정 완료하기
         collectionView.register(TaskDoneHeader.self, forSupplementaryViewOfKind: "TaskDoneHeader", withReuseIdentifier: "TaskDoneHeader")
         datasource.supplementaryViewProvider = { (collectionView, kind, indexPath) -> UICollectionReusableView in
             guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "TaskDoneHeader", for: indexPath) as? TaskDoneHeader else { return UICollectionReusableView() }
@@ -94,6 +93,7 @@ class ToDoListViewController: UIViewController {
         // swipe to update & delete
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.showsSeparators = false
+        config.headerMode = .supplementary
         config.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
             var item = self.datasource.itemIdentifier(for: indexPath)
             let updateAction = UIContextualAction(style: .normal, title: "EDIT") { _, _, completion in
