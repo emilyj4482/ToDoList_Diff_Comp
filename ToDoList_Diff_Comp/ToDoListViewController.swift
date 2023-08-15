@@ -28,6 +28,7 @@ class ToDoListViewController: UIViewController {
     
     enum Section {
         case main
+        case second
     }
     typealias Item = Task
     var datasource: UICollectionViewDiffableDataSource<Section, Item>!
@@ -74,7 +75,7 @@ class ToDoListViewController: UIViewController {
             return cell
         })
         
-        snapshot.appendSections([.main])
+        snapshot.appendSections([.main, .second])
         snapshot.appendItems(vm.lists[index].tasks, toSection: .main)
         datasource.apply(snapshot)
         
@@ -82,17 +83,24 @@ class ToDoListViewController: UIViewController {
         
         // header
         collectionView.register(TaskDoneHeader.self, forSupplementaryViewOfKind: "TaskDoneHeader", withReuseIdentifier: "TaskDoneHeader")
+        
+        
+        // TODO: hidden header 공백 없애기 / task done 추가 됐을 때 header isHidden 실시간 해제하기
         datasource.supplementaryViewProvider = { (collectionView, kind, indexPath) -> UICollectionReusableView in
             guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "TaskDoneHeader", for: indexPath) as? TaskDoneHeader else { return UICollectionReusableView() }
+            if indexPath.section == 0 || collectionView.numberOfItems(inSection: 1) == 0 {
+                header.isHidden = true
+            }
             return header
         }
+        
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
         
         // swipe to update & delete
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
-        config.showsSeparators = false
+        // config.showsSeparators = false
         config.headerMode = .supplementary
         config.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
             var item = self.datasource.itemIdentifier(for: indexPath)
@@ -146,7 +154,7 @@ class ToDoListViewController: UIViewController {
     private func reload() {
         guard let index = index else { return }
         snapshot.deleteAllItems()
-        snapshot.appendSections([.main])
+        snapshot.appendSections([.main, .second])
         snapshot.appendItems(vm.lists[index].tasks, toSection: .main)
         datasource.apply(snapshot)
     }
@@ -170,7 +178,8 @@ class ToDoListViewController: UIViewController {
                 vm.addTask(listId: list.id, task)
                 
                 // reload collection view
-                snapshot.appendItems([task], toSection: .main)
+                // snapshot.appendItems([task], toSection: .main)
+                snapshot.appendItems([task], toSection: .second)
                 datasource.apply(snapshot)
             }
             
