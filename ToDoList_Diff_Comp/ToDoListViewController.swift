@@ -27,8 +27,8 @@ class ToDoListViewController: UIViewController {
     }
     
     enum Section {
-        case main
-        case second
+        case undone
+        case done
     }
     typealias Item = Task
     var datasource: UICollectionViewDiffableDataSource<Section, Item>!
@@ -65,6 +65,7 @@ class ToDoListViewController: UIViewController {
             cell.doneButtonTapHandler = { isDone in
                 task.isDone = isDone
                 self.vm.updateTaskComplete(task)
+                self.headerReload(task, indexPath)
             }
             
             cell.starButtonTapHandler = { isImportant in
@@ -75,8 +76,8 @@ class ToDoListViewController: UIViewController {
             return cell
         })
         
-        snapshot.appendSections([.main, .second])
-        snapshot.appendItems(vm.lists[index].tasks, toSection: .main)
+        snapshot.appendSections([.undone, .done])
+        snapshot.appendItems(vm.lists[index].tasks, toSection: .undone)
         datasource.apply(snapshot)
         
         collectionView.collectionViewLayout = layout()
@@ -84,16 +85,18 @@ class ToDoListViewController: UIViewController {
         // header
         collectionView.register(TaskDoneHeader.self, forSupplementaryViewOfKind: "TaskDoneHeader", withReuseIdentifier: "TaskDoneHeader")
         
-        
-        // TODO: task done 추가 됐을 때 header isHidden 실시간 해제하기
         datasource.supplementaryViewProvider = { (collectionView, kind, indexPath) -> UICollectionReusableView in
             guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "TaskDoneHeader", for: indexPath) as? TaskDoneHeader else { return UICollectionReusableView() }
+            // task done section에만 header 표시
             if indexPath.section == 0 {
                 header.isHidden = true
+            } else if collectionView.numberOfItems(inSection: 1) == 0 {
+                header.isHidden = true
+            } else {
+                header.isHidden = false
             }
             return header
         }
-        
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
@@ -156,9 +159,20 @@ class ToDoListViewController: UIViewController {
     private func reload() {
         guard let index = index else { return }
         snapshot.deleteAllItems()
-        snapshot.appendSections([.main, .second])
-        snapshot.appendItems(vm.lists[index].tasks, toSection: .main)
+        snapshot.appendSections([.undone, .done])
+        snapshot.appendItems(vm.lists[index].tasks, toSection: .undone)
         datasource.apply(snapshot)
+    }
+    
+    // header reload : task done section 발생에 따라 header 노출
+    private func headerReload(_ item: Task, _ indexPath: IndexPath) {
+        if item.isDone == true {
+            collectionView.supplementaryView(forElementKind: "UICollectionElementKindSectionHeader", at: indexPath)?.isHidden = false
+        } else if item.isDone == false && collectionView.numberOfItems(inSection: 1) != 0 {
+            collectionView.supplementaryView(forElementKind: "UICollectionElementKindSectionHeader", at: indexPath)?.isHidden = false
+        } else {
+            collectionView.supplementaryView(forElementKind: "UICollectionElementKindSectionHeader", at: indexPath)?.isHidden = true
+        }
     }
     
     /*
@@ -180,8 +194,7 @@ class ToDoListViewController: UIViewController {
                 vm.addTask(listId: list.id, task)
                 
                 // reload collection view
-                // snapshot.appendItems([task], toSection: .main)
-                snapshot.appendItems([task], toSection: .second)
+                snapshot.appendItems([task], toSection: .undone)
                 datasource.apply(snapshot)
             }
             
