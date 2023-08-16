@@ -85,10 +85,10 @@ class ToDoListViewController: UIViewController {
         collectionView.register(TaskDoneHeader.self, forSupplementaryViewOfKind: "TaskDoneHeader", withReuseIdentifier: "TaskDoneHeader")
         
         
-        // TODO: hidden header 공백 없애기 / task done 추가 됐을 때 header isHidden 실시간 해제하기
+        // TODO: task done 추가 됐을 때 header isHidden 실시간 해제하기
         datasource.supplementaryViewProvider = { (collectionView, kind, indexPath) -> UICollectionReusableView in
             guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "TaskDoneHeader", for: indexPath) as? TaskDoneHeader else { return UICollectionReusableView() }
-            if indexPath.section == 0 || collectionView.numberOfItems(inSection: 1) == 0 {
+            if indexPath.section == 0 {
                 header.isHidden = true
             }
             return header
@@ -100,8 +100,10 @@ class ToDoListViewController: UIViewController {
         
         // swipe to update & delete
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
-        // config.showsSeparators = false
+        config.showsSeparators = false
         config.headerMode = .supplementary
+        config.headerTopPadding = 0
+        
         config.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
             var item = self.datasource.itemIdentifier(for: indexPath)
             let updateAction = UIContextualAction(style: .normal, title: "EDIT") { _, _, completion in

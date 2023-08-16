@@ -262,7 +262,7 @@
                                 <rect key="frame" x="0.0" y="768" width="393" height="50"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="tU3-a9-ppl">
-                                        <rect key="frame" x="15" y="16" width="20" height="18.666666666666657"/>
+                                        <rect key="frame" x="15" y="15.999999999999998" width="20" height="18.666666666666664"/>
                                         <color key="tintColor" systemColor="systemPinkColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="tU3-a9-ppl" secondAttribute="height" multiplier="1:1" id="7F5-dk-dMM"/>
