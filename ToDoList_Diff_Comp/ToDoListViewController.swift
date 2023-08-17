@@ -119,8 +119,10 @@ class ToDoListViewController: UIViewController {
                     completion(true)
                 }
                 let btnDone = UIAlertAction(title: "Done", style: .default, handler: { _ in
-                    guard let tfText = editAlert.textFields?[0].text else { return }
-                    item?.title = tfText
+                    guard let tfText = editAlert.textFields?[0].text?.trim() else { return }
+                    if !tfText.isEmpty {
+                        item?.title = tfText
+                    }
                     guard let item = item else { return }
                     self.vm.updateTaskComplete(item)
                     completion(true)
