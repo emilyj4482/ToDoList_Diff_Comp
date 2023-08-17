@@ -113,6 +113,15 @@ class TaskViewModel {
             }
         }
     }
+    
+    // task.isDone 여부에 따라 section 분리
+    func undoneTasks(_ listIndex: Int) -> [Task] {
+        return lists[listIndex].tasks.filter({ $0.isDone == false })
+    }
+    
+    func doneTasks(_ listIndex: Int) -> [Task] {
+        return lists[listIndex].tasks.filter({ $0.isDone == true })
+    }
 }
 
 // 문자열 앞뒤 공백 삭제 메소드 정의

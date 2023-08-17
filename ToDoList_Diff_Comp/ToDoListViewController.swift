@@ -52,6 +52,9 @@ class ToDoListViewController: UIViewController {
         // star button tap noti
         NotificationCenter.default.addObserver(self, selector: #selector(starButtonTapped), name: NSNotification.Name(rawValue: "starButtonTapped"), object: nil)
         
+        // done button tap noti
+        NotificationCenter.default.addObserver(self, selector: #selector(doneButtonTapped), name: NSNotification.Name("doneButtonTapped"), object: nil)
+        
         // 키보드 감지
         detectKeyboard()
         
@@ -65,7 +68,6 @@ class ToDoListViewController: UIViewController {
             cell.doneButtonTapHandler = { isDone in
                 task.isDone = isDone
                 self.vm.updateTaskComplete(task)
-                self.headerReload(task, indexPath)
             }
             
             cell.starButtonTapHandler = { isImportant in
@@ -77,7 +79,8 @@ class ToDoListViewController: UIViewController {
         })
         
         snapshot.appendSections([.undone, .done])
-        snapshot.appendItems(vm.lists[index].tasks, toSection: .undone)
+        snapshot.appendItems(vm.undoneTasks(index), toSection: .undone)
+        snapshot.appendItems(vm.doneTasks(index), toSection: .done)
         datasource.apply(snapshot)
         
         collectionView.collectionViewLayout = layout()
@@ -155,12 +158,18 @@ class ToDoListViewController: UIViewController {
         reload()
     }
     
+    // done toggle 시 done, undone section 간 item 이동 구현
+    @objc func doneButtonTapped(_ noti: Notification) {
+        print("done button tapped")
+    }
+    
     // view reload
     private func reload() {
         guard let index = index else { return }
         snapshot.deleteAllItems()
         snapshot.appendSections([.undone, .done])
-        snapshot.appendItems(vm.lists[index].tasks, toSection: .undone)
+        snapshot.appendItems(vm.undoneTasks(index), toSection: .undone)
+        snapshot.appendItems(vm.doneTasks(index), toSection: .done)
         datasource.apply(snapshot)
     }
     
