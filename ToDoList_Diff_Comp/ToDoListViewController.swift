@@ -65,23 +65,20 @@ class ToDoListViewController: UIViewController {
             // done & star 버튼 tap에 따른 데이터 변경
             var task = self.vm.lists[index].tasks[indexPath.item]
             
-            cell.doneButtonTapHandler = { isDone in
+            cell.doneButtonTapHandler = { [unowned self] isDone in
                 task.isDone = isDone
-                self.vm.updateTaskComplete(task)
+                vm.updateTaskComplete(task)
             }
             
-            cell.starButtonTapHandler = { isImportant in
+            cell.starButtonTapHandler = { [unowned self] isImportant in
                 task.isImportant = isImportant
-                self.vm.updateImportant(task)
+                vm.updateImportant(task)
             }
             
             return cell
         })
         
-        snapshot.appendSections([.undone, .done])
-        snapshot.appendItems(vm.undoneTasks(index), toSection: .undone)
-        snapshot.appendItems(vm.doneTasks(index), toSection: .done)
-        datasource.apply(snapshot)
+        reload()
         
         collectionView.collectionViewLayout = layout()
         
@@ -118,15 +115,15 @@ class ToDoListViewController: UIViewController {
                 let btnCancel = UIAlertAction(title: "Cancel", style: .cancel) { _ in
                     completion(true)
                 }
-                let btnDone = UIAlertAction(title: "Done", style: .default, handler: { _ in
+                let btnDone = UIAlertAction(title: "Done", style: .default, handler: { [unowned self] _ in
                     guard let tfText = editAlert.textFields?[0].text?.trim() else { return }
                     if !tfText.isEmpty {
                         item?.title = tfText
                     }
                     guard let item = item else { return }
-                    self.vm.updateTaskComplete(item)
+                    vm.updateTaskComplete(item)
                     completion(true)
-                    self.reload()
+                    reload()
                 })
                 editAlert.addTextField { tf in
                     tf.placeholder = item?.title
@@ -137,11 +134,11 @@ class ToDoListViewController: UIViewController {
                 self.present(editAlert, animated: true)
             }
             
-            let deleteAction = UIContextualAction(style: .destructive, title: "DELETE") { _, _, _ in
+            let deleteAction = UIContextualAction(style: .destructive, title: "DELETE") { [unowned self] _, _, _ in
                 guard let item = item else { return }
-                self.vm.deleteTaskComplete(item)
-                self.snapshot.deleteItems([item])
-                self.datasource.apply(self.snapshot)
+                vm.deleteTaskComplete(item)
+                snapshot.deleteItems([item])
+                datasource.apply(self.snapshot)
             }
             return UISwipeActionsConfiguration(actions: [updateAction, deleteAction])
         }
@@ -162,7 +159,7 @@ class ToDoListViewController: UIViewController {
     
     // done toggle 시 done, undone section 간 item 이동 구현
     @objc func doneButtonTapped(_ noti: Notification) {
-        print("done button tapped")
+        
     }
     
     // view reload
