@@ -184,13 +184,13 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="PSU-Uu-nCn">
                                     <size key="itemSize" width="393" height="96"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="headerReferenceSize" width="50" height="30"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="TaskCell" id="MYm-UT-LI1" customClass="TaskCell" customModule="ToDoList_Diff_Comp" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="96"/>
+                                        <rect key="frame" x="0.0" y="30" width="393" height="96"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="1q6-C9-g83">
                                             <rect key="frame" x="0.0" y="0.0" width="393" height="96"/>
@@ -241,6 +241,22 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="TaskDoneHeader" id="6uS-EC-zj6" customClass="TaskDoneHeader" customModule="ToDoList_Diff_Comp" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="393" height="30"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="tasks done!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5A1-23-9gl">
+                                            <rect key="frame" x="15" y="6.6666666666666679" width="75" height="17"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" systemColor="systemPinkColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="5A1-23-9gl" firstAttribute="centerY" secondItem="6uS-EC-zj6" secondAttribute="centerY" id="KiA-Pk-mC7"/>
+                                        <constraint firstItem="5A1-23-9gl" firstAttribute="leading" secondItem="6uS-EC-zj6" secondAttribute="leading" constant="15" id="LhR-jO-lei"/>
+                                    </constraints>
+                                </collectionReusableView>
                             </collectionView>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="amR-q5-9nL">
                                 <rect key="frame" x="0.0" y="768" width="393" height="50"/>
