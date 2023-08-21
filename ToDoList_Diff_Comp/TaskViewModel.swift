@@ -21,6 +21,10 @@ class TaskViewModel {
     // lists에 변동이 생길 때마다 로컬에 저장 : didSet
     var lists: [List] = [List(id: 1, name: "Important", tasks: [])]
     
+    /* task.isDone 여부에 따라 section 분리할 때 사용할 Array
+    var undoneTasks: [Task] = []
+    var doneTasks: [Task] = []
+    */
     
     func createList(_ listName: String) -> List {
         let nextId = lastListId + 1
@@ -114,14 +118,24 @@ class TaskViewModel {
         }
     }
     
-    // task.isDone 여부에 따라 section 분리
-    func undoneTasks(_ listIndex: Int) -> [Task] {
-        return lists[listIndex].tasks.filter({ $0.isDone == false })
+    /*
+    // task.isDone 여부에 따라 Array 구분
+    func filterTasks(_ listIndex: Int) {
+        undoneTasks = lists[listIndex].tasks.filter({ $0.isDone == false })
+        doneTasks = lists[listIndex].tasks.filter({ $0.isDone == true })
     }
     
-    func doneTasks(_ listIndex: Int) -> [Task] {
-        return lists[listIndex].tasks.filter({ $0.isDone == true })
+    // task.isDone 값이 변경될 때마다 Array 간 이동
+    func moveSection(_ task: Task) {
+        if task.isDone == true {
+            undoneTasks.removeAll(where: { $0.id == task.id})
+            doneTasks.append(task)
+        } else {
+            doneTasks.removeAll(where: { $0.id == task.id })
+            undoneTasks.append(task)
+        }
     }
+    */
 }
 
 // 문자열 앞뒤 공백 삭제 메소드 정의

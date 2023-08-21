@@ -7,6 +7,10 @@
 
 import UIKit
 
+/*
+ task.isDone 여부에 따라 section을 분리하고 done task 발생 시 done section에 header가 노출되도록 하고 싶었으나 Diffable datasource 및 snapshot으로 구현하는 데 한계점이 있어 보류함.
+ */
+
 class ToDoListViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
@@ -53,7 +57,7 @@ class ToDoListViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(starButtonTapped), name: NSNotification.Name(rawValue: "starButtonTapped"), object: nil)
         
         // done button tap noti
-        NotificationCenter.default.addObserver(self, selector: #selector(doneButtonTapped), name: NSNotification.Name("doneButtonTapped"), object: nil)
+        // NotificationCenter.default.addObserver(self, selector: #selector(doneButtonTapped), name: NSNotification.Name("doneButtonTapped"), object: nil)
         
         // 키보드 감지
         detectKeyboard()
@@ -68,6 +72,7 @@ class ToDoListViewController: UIViewController {
             cell.doneButtonTapHandler = { [unowned self] isDone in
                 task.isDone = isDone
                 vm.updateTaskComplete(task)
+                // vm.moveSection(task)
             }
             
             cell.starButtonTapHandler = { [unowned self] isImportant in
@@ -78,11 +83,12 @@ class ToDoListViewController: UIViewController {
             return cell
         })
         
+        // vm.filterTasks(index)
         reload()
         
         collectionView.collectionViewLayout = layout()
         
-        // header
+        /* header
         collectionView.register(TaskDoneHeader.self, forSupplementaryViewOfKind: "TaskDoneHeader", withReuseIdentifier: "TaskDoneHeader")
         
         datasource.supplementaryViewProvider = { (collectionView, kind, indexPath) -> UICollectionReusableView in
@@ -97,6 +103,7 @@ class ToDoListViewController: UIViewController {
             }
             return header
         }
+        */
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
@@ -104,8 +111,8 @@ class ToDoListViewController: UIViewController {
         // swipe to update & delete
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.showsSeparators = false
-        config.headerMode = .supplementary
-        config.headerTopPadding = 0
+        // config.headerMode = .supplementary
+        // config.headerTopPadding = 0
         
         config.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
             var item = self.datasource.itemIdentifier(for: indexPath)
@@ -157,22 +164,24 @@ class ToDoListViewController: UIViewController {
         reload()
     }
     
-    // done toggle 시 done, undone section 간 item 이동 구현
+    /* done toggle 시 done, undone section 간 item 이동 구현
     @objc func doneButtonTapped(_ noti: Notification) {
         
     }
+    */
     
     // view reload
     private func reload() {
         guard let index = index else { return }
         snapshot.deleteAllItems()
         snapshot.appendSections([.undone, .done])
-        snapshot.appendItems(vm.undoneTasks(index), toSection: .undone)
-        snapshot.appendItems(vm.doneTasks(index), toSection: .done)
+        // snapshot.appendItems(vm.undoneTasks, toSection: .undone)
+        // snapshot.appendItems(vm.doneTasks, toSection: .done)
+        snapshot.appendItems(vm.lists[index].tasks, toSection: .undone)
         datasource.apply(snapshot)
     }
     
-    // header reload : task done section 발생에 따라 header 노출
+    /* header reload : task done section 발생에 따라 header 노출
     private func headerReload(_ item: Task, _ indexPath: IndexPath) {
         if item.isDone == true {
             collectionView.supplementaryView(forElementKind: "UICollectionElementKindSectionHeader", at: indexPath)?.isHidden = false
@@ -182,6 +191,7 @@ class ToDoListViewController: UIViewController {
             collectionView.supplementaryView(forElementKind: "UICollectionElementKindSectionHeader", at: indexPath)?.isHidden = true
         }
     }
+    */
     
     /*
      우측 상단 button : Edit or Done
@@ -200,6 +210,8 @@ class ToDoListViewController: UIViewController {
             if !title.isEmpty {
                 let task = vm.createTask(listId: list.id, title)
                 vm.addTask(listId: list.id, task)
+                // undone tasks array에 추가
+                // vm.undoneTasks.append(task)
                 
                 // reload collection view
                 snapshot.appendItems([task], toSection: .undone)

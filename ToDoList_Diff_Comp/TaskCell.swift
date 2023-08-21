@@ -29,8 +29,9 @@ class TaskCell: UICollectionViewCell {
         // 데이터 변동 : doneButtonHandler에 isDone 여부 전송
         doneButtonTapHandler?(doneButton.isSelected)
         
-        // noti post : 변동된 isDone 값 noti와 함께 전송
+        /* noti post : 변동된 isDone 값 noti와 함께 전송
         NotificationCenter.default.post(name: NSNotification.Name("doneButtonTapped"), object: doneButton.isSelected)
+        */
     }
     
     @IBAction func starButtonTapped(_ sender: UIButton) {
