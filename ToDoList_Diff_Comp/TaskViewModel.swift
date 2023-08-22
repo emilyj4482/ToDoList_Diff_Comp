@@ -17,7 +17,11 @@ class TaskViewModel {
     
     // Important list는 고정값
     // lists에 변동이 생길 때마다 로컬에 저장 : didSet
-    var lists: [List] = [List(id: 1, name: "Important", tasks: [])]
+    var lists: [List] = [List(id: 1, name: "Important", tasks: [])] {
+        didSet {
+            dm.savaData(lists)
+        }
+    }
     
     /* task.isDone 여부에 따라 section 분리할 때 사용할 Array
     var undoneTasks: [Task] = []
@@ -48,9 +52,6 @@ class TaskViewModel {
     
     func addList(_ list: List) {
         lists.append(list)
-        
-        // disk에 저장
-        // dm.savaData(lists)
     }
     
     // Task 내용은 중복 허용(검사 X), 입력값에 대해 앞뒤 공백을 제거해준 뒤 생성한다.
@@ -62,9 +63,6 @@ class TaskViewModel {
         if let index = lists.firstIndex(where: { $0.id == listId }) {
             lists[index].tasks.append(task)
         }
-        
-        // disk에 저장
-        // dm.savaData(lists)
     }
     
     // important task인 경우 Important list와 속한 list 양쪽에서 업데이트 필요
@@ -73,9 +71,6 @@ class TaskViewModel {
             updateSingleTask(listId: 1, taskId: task.id, task: task)
         }
         updateSingleTask(listId: task.listId, taskId: task.id, task: task)
-        
-        // disk에 저장
-        // dm.savaData(lists)
     }
     
     private func updateSingleTask(listId: Int, taskId: UUID, task: Task) {
@@ -96,27 +91,18 @@ class TaskViewModel {
             }
         }
         updateSingleTask(listId: task.listId, taskId: task.id, task: task)
-        
-        // disk에 저장
-        // dm.savaData(lists)
     }
     
     func updateList(listId: Int, _ name: String) {
         if let index = lists.firstIndex(where: { $0.id == listId }) {
             lists[index].update(name: name)
         }
-        
-        // disk에 저장
-        // dm.savaData(lists)
     }
     
     func deleteList(listId: Int) {
         if let index = lists.firstIndex(where: { $0.id == listId }) {
             lists.remove(at: index)
         }
-        
-        // disk에 저장
-        // dm.savaData(lists)
     }
     
     // important task인 경우 Important list와 속한 list 양쪽에서 삭제 처리 필요
@@ -125,9 +111,6 @@ class TaskViewModel {
             deleteSingleTask(listId: 1, taskId: task.id)
         }
         deleteSingleTask(listId: task.listId, taskId: task.id)
-        
-        // disk에 저장
-        // dm.savaData(lists)
     }
     
     private func deleteSingleTask(listId: Int, taskId: UUID) {
@@ -157,11 +140,13 @@ class TaskViewModel {
     }
     */
     
-    // disk에서 저장된 data를 불러와 lists에 적용
+    // disk에서 저장된 data를 불러와 lists 및 lastListId 값에 적용
+    // TODO: 앱 최초 실행 시 Important list가 없는 것 해결
     func retrieveLists() {
         lists = dm.loadData()
         
-        // TODO: list id 
+        let lastId = lists.last?.id
+        lastListId = lastId ?? 1
     }
 }
 

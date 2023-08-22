@@ -26,6 +26,9 @@ class MainListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // disk에 저장돼있는 data 불러오기
+        vm.retrieveLists()
+        
         // modal dismiss noti
         NotificationCenter.default.addObserver(self, selector: #selector(reloadCollectionView), name: NSNotification.Name(rawValue: "newListAdded"), object: nil)
         
