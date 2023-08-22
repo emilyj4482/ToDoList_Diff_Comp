@@ -141,7 +141,6 @@ class TaskViewModel {
     */
     
     // disk에서 저장된 data를 불러와 lists 및 lastListId 값에 적용
-    // TODO: 앱 최초 실행 시 Important list가 없는 것 해결
     func retrieveLists() {
         lists = dm.loadData()
         

@@ -36,7 +36,8 @@ class DataManager {
             let url = fm.urls(for: .documentDirectory, in: .userDomainMask).first?.appending(component: "todo.json"),
             fm.fileExists(atPath: url.path),
             let data = fm.contents(atPath: url.path)
-        else { return [] }
+        else { return [List(id: 1, name: "Important", tasks: [])] }
+        // >> 앱 최초 실행 시에도 Important list가 default로 있게 하기 위함.
         
         let decoder = JSONDecoder()
         
