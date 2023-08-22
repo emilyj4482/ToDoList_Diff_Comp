@@ -11,7 +11,7 @@ import Foundation
 
 // 할 일 Object
 struct Task: Codable, Hashable {
-    let id: Int
+    var id = UUID()
     let listId: Int
     var title: String
     var isDone: Bool

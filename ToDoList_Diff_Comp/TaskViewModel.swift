@@ -10,8 +10,6 @@ import Foundation
 class TaskViewModel {
     static let shared = TaskViewModel()
     
-    // Task.id 저장용 프로퍼티
-    private var lastTaskId: Int = 0
     // List.id 저장용 프로퍼티
     private var lastListId: Int = 1
     // List 이름 중복 횟수 저장용 딕셔너리 [List이름: 중복 횟수]
@@ -57,9 +55,7 @@ class TaskViewModel {
     
     // Task 내용은 중복 허용(검사 X), 입력값에 대해 앞뒤 공백을 제거해준 뒤 생성한다.
     func createTask(listId: Int, _ title: String) -> Task {
-        let nextId = lastTaskId + 1
-        lastTaskId = nextId
-        return Task(id: nextId, listId: listId, title: title.trim(), isDone: false, isImportant: false)
+        return Task(listId: listId, title: title.trim(), isDone: false, isImportant: false)
     }
     
     func addTask(listId: Int, _ task: Task) {
@@ -82,7 +78,7 @@ class TaskViewModel {
         // dm.savaData(lists)
     }
     
-    private func updateSingleTask(listId: Int, taskId: Int, task: Task) {
+    private func updateSingleTask(listId: Int, taskId: UUID, task: Task) {
         if let index1 = lists.firstIndex(where: { $0.id == listId }) {
             if let index2 = lists[index1].tasks.firstIndex(where: { $0.id == taskId }) {
                 lists[index1].tasks[index2].update(title: task.title, isDone: task.isDone, isImportant: task.isImportant)
@@ -134,7 +130,7 @@ class TaskViewModel {
         // dm.savaData(lists)
     }
     
-    private func deleteSingleTask(listId: Int, taskId: Int) {
+    private func deleteSingleTask(listId: Int, taskId: UUID) {
         if let index1 = lists.firstIndex(where: { $0.id == listId }) {
             if let index2 = lists[index1].tasks.firstIndex(where: { $0.id == taskId }) {
                 lists[index1].tasks.remove(at: index2)
@@ -162,9 +158,10 @@ class TaskViewModel {
     */
     
     // disk에서 저장된 data를 불러와 lists에 적용
-    // TODO: id를 int가 아니라 uuid로 변환해야 할 듯
     func retrieveLists() {
         lists = dm.loadData()
+        
+        // TODO: list id 
     }
 }
 
