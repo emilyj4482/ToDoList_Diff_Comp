@@ -26,6 +26,9 @@ class TaskViewModel {
     var doneTasks: [Task] = []
     */
     
+    // disk에 in app data json 파일로 저장
+    private let dm = DataManager.shared
+    
     func createList(_ listName: String) -> List {
         let nextId = lastListId + 1
         lastListId = nextId
@@ -47,6 +50,9 @@ class TaskViewModel {
     
     func addList(_ list: List) {
         lists.append(list)
+        
+        // disk에 저장
+        // dm.savaData(lists)
     }
     
     // Task 내용은 중복 허용(검사 X), 입력값에 대해 앞뒤 공백을 제거해준 뒤 생성한다.
@@ -60,6 +66,9 @@ class TaskViewModel {
         if let index = lists.firstIndex(where: { $0.id == listId }) {
             lists[index].tasks.append(task)
         }
+        
+        // disk에 저장
+        // dm.savaData(lists)
     }
     
     // important task인 경우 Important list와 속한 list 양쪽에서 업데이트 필요
@@ -68,6 +77,9 @@ class TaskViewModel {
             updateSingleTask(listId: 1, taskId: task.id, task: task)
         }
         updateSingleTask(listId: task.listId, taskId: task.id, task: task)
+        
+        // disk에 저장
+        // dm.savaData(lists)
     }
     
     private func updateSingleTask(listId: Int, taskId: Int, task: Task) {
@@ -88,18 +100,27 @@ class TaskViewModel {
             }
         }
         updateSingleTask(listId: task.listId, taskId: task.id, task: task)
+        
+        // disk에 저장
+        // dm.savaData(lists)
     }
     
     func updateList(listId: Int, _ name: String) {
         if let index = lists.firstIndex(where: { $0.id == listId }) {
             lists[index].update(name: name)
         }
+        
+        // disk에 저장
+        // dm.savaData(lists)
     }
     
     func deleteList(listId: Int) {
         if let index = lists.firstIndex(where: { $0.id == listId }) {
             lists.remove(at: index)
         }
+        
+        // disk에 저장
+        // dm.savaData(lists)
     }
     
     // important task인 경우 Important list와 속한 list 양쪽에서 삭제 처리 필요
@@ -108,6 +129,9 @@ class TaskViewModel {
             deleteSingleTask(listId: 1, taskId: task.id)
         }
         deleteSingleTask(listId: task.listId, taskId: task.id)
+        
+        // disk에 저장
+        // dm.savaData(lists)
     }
     
     private func deleteSingleTask(listId: Int, taskId: Int) {
@@ -136,6 +160,12 @@ class TaskViewModel {
         }
     }
     */
+    
+    // disk에서 저장된 data를 불러와 lists에 적용
+    // TODO: id를 int가 아니라 uuid로 변환해야 할 듯
+    func retrieveLists() {
+        lists = dm.loadData()
+    }
 }
 
 // 문자열 앞뒤 공백 삭제 메소드 정의
