@@ -39,6 +39,8 @@ class DataManager {
         else { return [List(id: 1, name: "Important", tasks: [])] }
         // >> 앱 최초 실행 시에도 Important list가 default로 있게 하기 위함.
         
+        print("JSON >>> \(url.path)")
+        
         let decoder = JSONDecoder()
         
         do {
@@ -47,6 +49,18 @@ class DataManager {
         } catch {
             print("ERROR >>> \(error)")
             return []
+        }
+    }
+    
+    // 기존 data reset (필요 시에만 사용)
+    func deleteJSON() {
+        guard let url = fm.urls(for: .documentDirectory, in: .userDomainMask).first?.appending(component: "todo.json") else { return }
+        
+        do {
+            try fm.removeItem(at: url)
+            print("JSON removed")
+        } catch {
+            print("ERROR >>> \(error)")
         }
     }
 }
