@@ -77,16 +77,22 @@ class MainListViewController: UIViewController {
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.showsSeparators = false
         config.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
-            // important list는 삭제 불가능 >> swipe action 적용하지 않음
+            // Important list는 삭제 불가능 >> swipe action 적용하지 않음
             if indexPath.item != 0 {
                 let item = self.datasource.itemIdentifier(for: indexPath)
-                let action = UIContextualAction(style: .destructive, title: "DELETE") { _, _, _ in
+                let action = UIContextualAction(style: .destructive, title: "DELETE") { [unowned self] _, _, _ in
                     guard let item = item else { return }
-                    self.vm.deleteList(listId: item.id)
-                    self.snapshot.deleteItems([item])
-                    self.datasource.apply(self.snapshot)
-                    self.updateCountLabel()
-                    print("\(self.vm.lists)")
+                    
+                    // 삭제 대상 list가 important task를 포함하고 있을 때, list에 속했던 important task들이 Important list에서도 삭제되어야 한다.
+                    if item.tasks.contains(where: { $0.isImportant }) {
+                        vm.lists[0].tasks.removeAll(where: { $0.listId == item.id && $0.isImportant })
+                    }
+                    
+                    vm.deleteList(listId: item.id)
+                    snapshot.deleteAllItems()
+                    reload()
+                    updateCountLabel()
+                    print("\(vm.lists)")
                 }
                 return UISwipeActionsConfiguration(actions: [action])
             }

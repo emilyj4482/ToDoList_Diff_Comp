@@ -10,6 +10,9 @@ import Foundation
 class TaskViewModel {
     static let shared = TaskViewModel()
     
+    // disk에 in app data json 파일로 저장
+    private let dm = DataManager.shared
+    
     // List.id 저장용 프로퍼티
     private var lastListId: Int = 1
     // List 이름 중복 횟수 저장용 딕셔너리 [List이름: 중복 횟수]
@@ -27,9 +30,6 @@ class TaskViewModel {
     var undoneTasks: [Task] = []
     var doneTasks: [Task] = []
     */
-    
-    // disk에 in app data json 파일로 저장
-    private let dm = DataManager.shared
     
     func createList(_ listName: String) -> List {
         let nextId = lastListId + 1
