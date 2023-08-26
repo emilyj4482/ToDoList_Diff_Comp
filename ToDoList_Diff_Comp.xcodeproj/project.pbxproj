@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A104F6912A94FF16004CD2D9 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A104F6902A94FF16004CD2D9 /* DataManager.swift */; };
 		A11764312A49D16C00A54ABE /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11764302A49D16C00A54ABE /* TaskViewModel.swift */; };
 		A12791AB2A8552D00094907F /* TaskDoneHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12791AA2A8552D00094907F /* TaskDoneHeader.swift */; };
 		A1B682272A45C84200BAC12A /* AddNewListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B682262A45C84200BAC12A /* AddNewListViewController.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A104F6902A94FF16004CD2D9 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		A11764302A49D16C00A54ABE /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
 		A12791AA2A8552D00094907F /* TaskDoneHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDoneHeader.swift; sourceTree = "<group>"; };
 		A1B682262A45C84200BAC12A /* AddNewListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewListViewController.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				A1BC230D2A45830C00C5D9BA /* SceneDelegate.swift */,
 				A1B6822E2A45CE1200BAC12A /* Task.swift */,
 				A11764302A49D16C00A54ABE /* TaskViewModel.swift */,
+				A104F6902A94FF16004CD2D9 /* DataManager.swift */,
 				A1BC230F2A45830C00C5D9BA /* MainListViewController.swift */,
 				A1B682262A45C84200BAC12A /* AddNewListViewController.swift */,
 				A1B682282A45C84F00BAC12A /* ToDoListViewController.swift */,
@@ -167,6 +170,7 @@
 				A12791AB2A8552D00094907F /* TaskDoneHeader.swift in Sources */,
 				A1B6822B2A45C87900BAC12A /* ListCell.swift in Sources */,
 				A1B682292A45C84F00BAC12A /* ToDoListViewController.swift in Sources */,
+				A104F6912A94FF16004CD2D9 /* DataManager.swift in Sources */,
 				A11764312A49D16C00A54ABE /* TaskViewModel.swift in Sources */,
 				A1B682272A45C84200BAC12A /* AddNewListViewController.swift in Sources */,
 			);

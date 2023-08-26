@@ -10,8 +10,9 @@ import Foundation
 class TaskViewModel {
     static let shared = TaskViewModel()
     
-    // Task.id 저장용 프로퍼티
-    private var lastTaskId: Int = 0
+    // disk에 in app data json 파일로 저장
+    private let dm = DataManager.shared
+    
     // List.id 저장용 프로퍼티
     private var lastListId: Int = 1
     // List 이름 중복 횟수 저장용 딕셔너리 [List이름: 중복 횟수]
@@ -19,7 +20,11 @@ class TaskViewModel {
     
     // Important list는 고정값
     // lists에 변동이 생길 때마다 로컬에 저장 : didSet
-    var lists: [List] = [List(id: 1, name: "Important", tasks: [])]
+    var lists: [List] = [List(id: 1, name: "Important", tasks: [])] {
+        didSet {
+            dm.savaData(lists)
+        }
+    }
     
     /* task.isDone 여부에 따라 section 분리할 때 사용할 Array
     var undoneTasks: [Task] = []
@@ -51,9 +56,7 @@ class TaskViewModel {
     
     // Task 내용은 중복 허용(검사 X), 입력값에 대해 앞뒤 공백을 제거해준 뒤 생성한다.
     func createTask(listId: Int, _ title: String) -> Task {
-        let nextId = lastTaskId + 1
-        lastTaskId = nextId
-        return Task(id: nextId, listId: listId, title: title.trim(), isDone: false, isImportant: false)
+        return Task(listId: listId, title: title.trim(), isDone: false, isImportant: false)
     }
     
     func addTask(listId: Int, _ task: Task) {
@@ -70,7 +73,7 @@ class TaskViewModel {
         updateSingleTask(listId: task.listId, taskId: task.id, task: task)
     }
     
-    private func updateSingleTask(listId: Int, taskId: Int, task: Task) {
+    private func updateSingleTask(listId: Int, taskId: UUID, task: Task) {
         if let index1 = lists.firstIndex(where: { $0.id == listId }) {
             if let index2 = lists[index1].tasks.firstIndex(where: { $0.id == taskId }) {
                 lists[index1].tasks[index2].update(title: task.title, isDone: task.isDone, isImportant: task.isImportant)
@@ -110,7 +113,7 @@ class TaskViewModel {
         deleteSingleTask(listId: task.listId, taskId: task.id)
     }
     
-    private func deleteSingleTask(listId: Int, taskId: Int) {
+    private func deleteSingleTask(listId: Int, taskId: UUID) {
         if let index1 = lists.firstIndex(where: { $0.id == listId }) {
             if let index2 = lists[index1].tasks.firstIndex(where: { $0.id == taskId }) {
                 lists[index1].tasks.remove(at: index2)
@@ -136,6 +139,14 @@ class TaskViewModel {
         }
     }
     */
+    
+    // disk에서 저장된 data를 불러와 lists 및 lastListId 값에 적용
+    func retrieveLists() {
+        lists = dm.loadData()
+        
+        let lastId = lists.last?.id
+        lastListId = lastId ?? 1
+    }
 }
 
 // 문자열 앞뒤 공백 삭제 메소드 정의
