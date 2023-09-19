@@ -28,7 +28,7 @@ class AddNewListViewController: UIViewController {
         if newListName.isEmpty {
             newListName = "Untitled list"
         }
-        vm.addList(vm.createList(newListName))
+        vm.addList(vm.createList(examListName(newListName)))
         
         print(vm.lists)
         
@@ -36,5 +36,21 @@ class AddNewListViewController: UIViewController {
         
         // Done button에 의하여 modal dismiss 시 main에 noti
         NotificationCenter.default.post(name: NSNotification.Name("newListAdded"), object: nil)
+    }
+    
+    // list name 중복검사
+    func examListName(_ text: String) -> String {
+        let list = vm.lists.map { list in
+            list.name
+        }
+        
+        var count = 1
+        var listName = text
+        while list.contains(listName) {
+            listName = "\(text) (\(count))"
+            count += 1
+        }
+        
+        return listName
     }
 }
