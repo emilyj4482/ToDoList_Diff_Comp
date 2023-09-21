@@ -82,24 +82,40 @@ class MainListViewController: UIViewController {
                 let item = self.datasource.itemIdentifier(for: indexPath)
                 let action = UIContextualAction(style: .destructive, title: "DELETE") { [unowned self] _, _, _ in
                     guard let item = item else { return }
-                    
-                    // 삭제 대상 list가 important task를 포함하고 있을 때, list에 속했던 important task들이 Important list에서도 삭제되어야 한다.
-                    if item.tasks.contains(where: { $0.isImportant }) {
-                        vm.lists[0].tasks.removeAll(where: { $0.listId == item.id && $0.isImportant })
-                    }
-                    
-                    vm.deleteList(listId: item.id)
-                    snapshot.deleteAllItems()
-                    reload()
-                    updateCountLabel()
-                    print("\(vm.lists)")
+                    showActionSheet(item)
                 }
                 return UISwipeActionsConfiguration(actions: [action])
             }
             return UISwipeActionsConfiguration(actions: [])
         }
-        
         return UICollectionViewCompositionalLayout.list(using: config)
+    }
+    
+    // action sheet
+    private func showActionSheet(_ item: Item) {
+        let alert = UIAlertController(title: "Are you sure deleting the list?", message: "", preferredStyle: .actionSheet)
+        let deleteButton = UIAlertAction(title: "Delete", style: .destructive) { _ in
+            self.deleteItem(item)
+        }
+        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel)
+        // TODO: cancel tap 후 swipe 상태가 유지되는 버그 해결
+        
+        alert.addAction(deleteButton)
+        alert.addAction(cancelButton)
+        self.present(alert, animated: true)
+    }
+    
+    // delete item
+    private func deleteItem(_ item: Item) {
+        // 삭제 대상 list가 important task를 포함하고 있을 때, list에 속했던 important task들이 Important list에서도 삭제되어야 한다.
+        if item.tasks.contains(where: { $0.isImportant }) {
+            vm.lists[0].tasks.removeAll(where: { $0.listId == item.id && $0.isImportant })
+        }
+        
+        vm.deleteList(listId: item.id)
+        snapshot.deleteAllItems()
+        reload()
+        updateCountLabel()
     }
 
     @IBAction func addListButtonTapped(_ sender: UIButton) {
