@@ -8,22 +8,21 @@
 import UIKit
 
 class TaskEditViewController: UIViewController {
-
+    
+    @IBOutlet weak var doneImage: UIImageView!
+    @IBOutlet weak var tf: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        self.sheetPresentationController?.detents = [.custom(resolver: { _ in return 50 })]
+        
+        tf.becomeFirstResponder()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @IBAction func doneButtonTapped(_ sender: UIButton) {
+        print(tf.text ?? "")
+        
+        dismiss(animated: true)
     }
-    */
-
 }
