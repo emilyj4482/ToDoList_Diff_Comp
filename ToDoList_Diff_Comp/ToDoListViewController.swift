@@ -103,8 +103,10 @@ class ToDoListViewController: UIViewController {
         
         config.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
             var item = self.datasource.itemIdentifier(for: indexPath)
+            
+            
             let updateAction = UIContextualAction(style: .normal, title: "EDIT") { _, _, completion in
-                // textfield를 가진 alert 창을 띄워 task 이름 수정 기능 제공
+                /* textfield를 가진 alert 창을 띄워 task 이름 수정 기능 제공
                 let editAlert = UIAlertController(title: "Modifying task?", message: "", preferredStyle: .alert)
                 let btnCancel = UIAlertAction(title: "Cancel", style: .cancel) { _ in
                     completion(true)
@@ -126,7 +128,21 @@ class ToDoListViewController: UIViewController {
                 editAlert.addAction(btnDone)
                 
                 self.present(editAlert, animated: true)
+                */
+                
+                guard
+                    let index = self.index,
+                    // let text = item?.title,
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "TaskEditViewController") as? TaskEditViewController
+                else { return }
+                vc.index = index
+                vc.isCreating = false
+                // vc.tf.text = text
+                self.present(vc, animated: true)
+                
+                completion(true)
             }
+            
             
             let deleteAction = UIContextualAction(style: .destructive, title: "DELETE") { [unowned self] _, _, _ in
                 guard let item = item else { return }
@@ -203,7 +219,11 @@ class ToDoListViewController: UIViewController {
     }
     
     @IBAction func addButtonTapped(_ sender: UIButton) {
-        guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "TaskEditViewController") as? TaskEditViewController else { return }
+        guard
+            let index = index,
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "TaskEditViewController") as? TaskEditViewController
+        else { return }
+        vc.index = index
         present(vc, animated: true)
     }
 }

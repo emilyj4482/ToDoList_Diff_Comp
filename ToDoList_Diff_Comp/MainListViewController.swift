@@ -80,9 +80,10 @@ class MainListViewController: UIViewController {
             // Important list는 삭제 불가능 >> swipe action 적용하지 않음
             if indexPath.item != 0 {
                 let item = self.datasource.itemIdentifier(for: indexPath)
-                let action = UIContextualAction(style: .destructive, title: "DELETE") { [unowned self] _, _, _ in
+                let action = UIContextualAction(style: .destructive, title: "DELETE") { [unowned self] _, _, completion in
                     guard let item = item else { return }
                     showActionSheet(item)
+                    completion(true)
                 }
                 return UISwipeActionsConfiguration(actions: [action])
             }
@@ -98,7 +99,6 @@ class MainListViewController: UIViewController {
             self.deleteItem(item)
         }
         let cancelButton = UIAlertAction(title: "Cancel", style: .cancel)
-        // TODO: cancel tap 후 swipe 상태가 유지되는 버그 해결
         
         alert.addAction(deleteButton)
         alert.addAction(cancelButton)
