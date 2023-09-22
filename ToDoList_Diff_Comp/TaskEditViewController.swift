@@ -49,7 +49,11 @@ class TaskEditViewController: UIViewController {
             let title = tf.text?.trim()
         else { return }
         
-        vm.addTask(listId: vm.lists[index].id, vm.createTask(listId: vm.lists[index].id, title))
+        if title.isEmpty {
+            showAlert()
+        } else {
+            vm.addTask(listId: vm.lists[index].id, vm.createTask(listId: vm.lists[index].id, title))
+        }
     }
     
     private func editTask() {
@@ -58,7 +62,19 @@ class TaskEditViewController: UIViewController {
             let text = tf.text?.trim()
         else { return }
         
-        task.title = text
-        vm.updateTaskComplete(task)
+        if text.isEmpty {
+            showAlert()
+        } else {
+            task.title = text
+            vm.updateTaskComplete(task)
+        }
+    }
+    
+    private func showAlert() {
+        let alert = UIAlertController(title: "You need to type at least 1 letter.", message: "", preferredStyle: .alert)
+        let okButton = UIAlertAction(title: "OK", style: .cancel)
+        
+        alert.addAction(okButton)
+        present(alert, animated: true)
     }
 }

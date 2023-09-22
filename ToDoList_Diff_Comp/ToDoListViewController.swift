@@ -175,10 +175,13 @@ class ToDoListViewController: UIViewController {
         // textfield를 가진 alert 창을 띄워 list 이름 수정 기능 제공
         let editAlert = UIAlertController(title: "Type your new list name down below.", message: "", preferredStyle: .alert)
         let btnCancel = UIAlertAction(title: "Cancel", style: .cancel)
-        let btnDone = UIAlertAction(title: "Done", style: .default, handler: { _ in
-            guard let tfText = editAlert.textFields?[0].text else { return }
-            self.vm.updateList(listId: list.id, tfText)
-            self.navigationItem.title = tfText
+        let btnDone = UIAlertAction(title: "Done", style: .default, handler: { [unowned self] _ in
+            guard let tfText = editAlert.textFields?[0].text?.trim() else { return }
+            
+            if !tfText.isEmpty {
+                vm.updateList(listId: list.id, tfText)
+                navigationItem.title = tfText
+            }
         })
         
         editAlert.addTextField { tf in
