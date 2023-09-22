@@ -102,50 +102,22 @@ class ToDoListViewController: UIViewController {
         // config.headerTopPadding = 0
         
         config.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
-            var item = self.datasource.itemIdentifier(for: indexPath)
+            guard let item = self.datasource.itemIdentifier(for: indexPath) else { return nil }
             
-            
+            // task update : modal view로 데이터를 전송하며 이동
             let updateAction = UIContextualAction(style: .normal, title: "EDIT") { _, _, completion in
-                /* textfield를 가진 alert 창을 띄워 task 이름 수정 기능 제공
-                let editAlert = UIAlertController(title: "Modifying task?", message: "", preferredStyle: .alert)
-                let btnCancel = UIAlertAction(title: "Cancel", style: .cancel) { _ in
-                    completion(true)
-                }
-                let btnDone = UIAlertAction(title: "Done", style: .default, handler: { [unowned self] _ in
-                    guard let tfText = editAlert.textFields?[0].text?.trim() else { return }
-                    if !tfText.isEmpty {
-                        item?.title = tfText
-                    }
-                    guard let item = item else { return }
-                    vm.updateTaskComplete(item)
-                    completion(true)
-                    reload()
-                })
-                editAlert.addTextField { tf in
-                    tf.placeholder = item?.title
-                }
-                editAlert.addAction(btnCancel)
-                editAlert.addAction(btnDone)
-                
-                self.present(editAlert, animated: true)
-                */
-                
                 guard
                     let index = self.index,
-                    // let text = item?.title,
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "TaskEditViewController") as? TaskEditViewController
                 else { return }
                 vc.index = index
                 vc.isCreating = false
-                // vc.tf.text = text
+                vc.taskToEdit = item
                 self.present(vc, animated: true)
-                
                 completion(true)
             }
             
-            
             let deleteAction = UIContextualAction(style: .destructive, title: "DELETE") { [unowned self] _, _, _ in
-                guard let item = item else { return }
                 vm.deleteTaskComplete(item)
                 snapshot.deleteItems([item])
                 datasource.apply(self.snapshot)

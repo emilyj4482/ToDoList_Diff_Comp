@@ -15,12 +15,19 @@ class TaskEditViewController: UIViewController {
     var vm = TaskViewModel.shared
     
     var index: Int?
+    // task 추가 mode와 수정 mode로 나눈다
     var isCreating: Bool = true
+    var taskToEdit: Task?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.sheetPresentationController?.detents = [.custom(resolver: { _ in return 50 })]
+        
+        // task 수정 mode일 경우, 전달 받은 기존 task title이 textfield에 입력된 상태
+        if !isCreating {
+            tf.text = taskToEdit?.title
+        }
         
         tf.becomeFirstResponder()
     }
@@ -29,7 +36,7 @@ class TaskEditViewController: UIViewController {
         if isCreating {
             addTask()
         } else {
-            
+            editTask()
         }
         // TODO: 입력값이 없을 때 alert 표시
         // TODO: task 추가/수정 되자마자 view reload
@@ -46,6 +53,12 @@ class TaskEditViewController: UIViewController {
     }
     
     private func editTask() {
+        guard
+            var task = taskToEdit,
+            let text = tf.text?.trim()
+        else { return }
         
+        task.title = text
+        vm.updateTaskComplete(task)
     }
 }
