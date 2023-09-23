@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A104F6912A94FF16004CD2D9 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A104F6902A94FF16004CD2D9 /* DataManager.swift */; };
+		A114364C2ABCC549003E6A9E /* TaskEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A114364B2ABCC549003E6A9E /* TaskEditViewController.swift */; };
 		A11764312A49D16C00A54ABE /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11764302A49D16C00A54ABE /* TaskViewModel.swift */; };
 		A12791AB2A8552D00094907F /* TaskDoneHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12791AA2A8552D00094907F /* TaskDoneHeader.swift */; };
 		A1B682272A45C84200BAC12A /* AddNewListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B682262A45C84200BAC12A /* AddNewListViewController.swift */; };
@@ -25,6 +26,7 @@
 
 /* Begin PBXFileReference section */
 		A104F6902A94FF16004CD2D9 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		A114364B2ABCC549003E6A9E /* TaskEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskEditViewController.swift; sourceTree = "<group>"; };
 		A11764302A49D16C00A54ABE /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
 		A12791AA2A8552D00094907F /* TaskDoneHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDoneHeader.swift; sourceTree = "<group>"; };
 		A1B682262A45C84200BAC12A /* AddNewListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewListViewController.swift; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 				A1BC230F2A45830C00C5D9BA /* MainListViewController.swift */,
 				A1B682262A45C84200BAC12A /* AddNewListViewController.swift */,
 				A1B682282A45C84F00BAC12A /* ToDoListViewController.swift */,
+				A114364B2ABCC549003E6A9E /* TaskEditViewController.swift */,
 				A1BC23112A45830C00C5D9BA /* Main.storyboard */,
 				A1B6822A2A45C87900BAC12A /* ListCell.swift */,
 				A1B6822C2A45C88400BAC12A /* TaskCell.swift */,
@@ -165,6 +168,7 @@
 				A1B6822F2A45CE1200BAC12A /* Task.swift in Sources */,
 				A1BC23102A45830C00C5D9BA /* MainListViewController.swift in Sources */,
 				A1B6822D2A45C88400BAC12A /* TaskCell.swift in Sources */,
+				A114364C2ABCC549003E6A9E /* TaskEditViewController.swift in Sources */,
 				A1BC230C2A45830C00C5D9BA /* AppDelegate.swift in Sources */,
 				A1BC230E2A45830C00C5D9BA /* SceneDelegate.swift in Sources */,
 				A12791AB2A8552D00094907F /* TaskDoneHeader.swift in Sources */,
