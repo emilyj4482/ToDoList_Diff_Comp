@@ -13,7 +13,7 @@ class ToDoListViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var addbutton: UIButton!
     
-    var vm = TaskViewModel.shared
+    var vm = ListViewModel.shared
     
     var index: Int?
     

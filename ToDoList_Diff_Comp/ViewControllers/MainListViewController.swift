@@ -13,7 +13,7 @@ class MainListViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var listCountLabel: UILabel!
     
-    var vm = TaskViewModel.shared
+    var vm = ListViewModel.shared
     
     enum Section {
         case main

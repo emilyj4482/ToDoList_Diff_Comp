@@ -12,7 +12,7 @@ class TaskEditViewController: UIViewController {
     @IBOutlet weak var doneImage: UIImageView!
     @IBOutlet weak var tf: UITextField!
     
-    var vm = TaskViewModel.shared
+    var vm = ListViewModel.shared
     
     var index: Int?
     // task 추가 mode와 수정 mode로 나눈다

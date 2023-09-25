@@ -7,8 +7,6 @@
 
 import Foundation
 
-/* Model */
-
 // 할 일 Object
 struct Task: Codable, Hashable {
     var id = UUID()
@@ -21,16 +19,5 @@ struct Task: Codable, Hashable {
         self.title = title
         self.isDone = isDone
         self.isImportant = isImportant
-    }
-}
-
-// 리스트 Object
-struct List: Codable, Hashable {
-    let id: Int
-    var name: String
-    var tasks: [Task]
-    
-    mutating func update(name: String) {
-        self.name = name
     }
 }

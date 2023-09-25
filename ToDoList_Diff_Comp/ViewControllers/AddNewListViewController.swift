@@ -11,7 +11,7 @@ class AddNewListViewController: UIViewController {
     
     @IBOutlet weak var textField: UITextField!
 
-    var vm = TaskViewModel.shared
+    var vm = ListViewModel.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()

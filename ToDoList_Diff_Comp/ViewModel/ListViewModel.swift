@@ -7,8 +7,8 @@
 
 import Foundation
 
-class TaskViewModel {
-    static let shared = TaskViewModel()
+class ListViewModel {
+    static let shared = ListViewModel()
     
     // disk에 in app data json 파일로 저장
     private let dm = DataManager.shared
