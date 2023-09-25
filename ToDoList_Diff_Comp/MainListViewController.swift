@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class MainListViewController: UIViewController {
     
@@ -21,7 +22,7 @@ class MainListViewController: UIViewController {
     typealias Item = List
     var datasource: UICollectionViewDiffableDataSource<Section, Item>!
     
-    var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+    var subscriptions = Set<AnyCancellable>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,41 +30,43 @@ class MainListViewController: UIViewController {
         // disk에 저장돼있는 data 불러오기
         vm.retrieveLists()
         
-        // modal dismiss noti
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadCollectionView), name: NSNotification.Name(rawValue: "newListAdded"), object: nil)
-        
+        configureCollectionView()
+        bind()
+
+        collectionView.delegate = self
+    }
+
+    private func configureCollectionView() {
+        // data source
         datasource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, item in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ListCell", for: indexPath) as? ListCell else { return nil }
             cell.configure(item)
             return cell
         })
         
-        reload()
-        
+        // layout
         collectionView.collectionViewLayout = layout()
-        
-        updateCountLabel()
-        
-        collectionView.delegate = self
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        // todo list view에서 돌아올 때마다 view reload (데이터 수정사항 적용)
-        snapshot.deleteAllItems()
-        reload()
-    }
-    
-    // view reload
-    private func reload() {
-        snapshot.appendSections([.main])
-        snapshot.appendItems(vm.lists, toSection: .main)
-        datasource.apply(snapshot)
+    private func bind() {
+        vm.$lists
+            .receive(on: RunLoop.main)
+            .sink { lists in
+                // collection view update
+                var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+                snapshot.appendSections([.main])
+                snapshot.appendItems(lists, toSection: .main)
+                self.datasource.apply(snapshot)
+                // list count label
+                self.updateCountLabel(lists.count)
+            }
+            .store(in: &subscriptions)
+        
     }
     
     // list count label 뷰 적용
-    func updateCountLabel() {
-        let count = vm.lists.count - 1
+    func updateCountLabel(_ count: Int) {
+        let count = count - 1
         if count <= 1 {
             listCountLabel.text = "You have \(count) custom list."
         } else {
@@ -111,25 +114,13 @@ class MainListViewController: UIViewController {
         if item.tasks.contains(where: { $0.isImportant }) {
             vm.lists[0].tasks.removeAll(where: { $0.listId == item.id && $0.isImportant })
         }
-        
         vm.deleteList(listId: item.id)
-        snapshot.deleteAllItems()
-        reload()
-        updateCountLabel()
     }
 
     @IBAction func addListButtonTapped(_ sender: UIButton) {
         guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "AddNewListViewController") as? AddNewListViewController else { return }
         present(vc, animated: true)
     }
-    
-    // new list 추가 시 collection view에 적용
-    @objc func reloadCollectionView() {
-        snapshot.appendItems([vm.lists.last!], toSection: .main)
-        datasource.apply(snapshot)
-        updateCountLabel()
-    }
-    
 }
 
 extension MainListViewController: UICollectionViewDelegate {

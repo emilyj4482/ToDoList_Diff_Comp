@@ -18,7 +18,7 @@ class TaskViewModel {
     
     // Important list는 고정값
     // lists에 변동이 생길 때마다 로컬에 저장 : didSet
-    var lists: [List] = [List(id: 1, name: "Important", tasks: [])] {
+    @Published var lists: [List] = [List(id: 1, name: "Important", tasks: [])] {
         didSet {
             dm.savaData(lists)
         }
