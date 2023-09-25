@@ -13,7 +13,10 @@ class ToDoListViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var addbutton: UIButton!
     
-    var vm = ListViewModel.shared
+    var lvm = ListViewModel.shared
+    
+    // test code
+    var tvm = TaskViewModel.shared
     
     var index: Int?
     
@@ -29,7 +32,7 @@ class ToDoListViewController: UIViewController {
         super.viewDidLoad()
         
         guard let index = index else { return }
-        print(vm.lists[index])
+        print(lvm.lists[index])
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editButtonTapped))
         
@@ -53,16 +56,16 @@ class ToDoListViewController: UIViewController {
             cell.configure(item)
             
             // done & star 버튼 tap에 따른 데이터 변경
-            var task = self.vm.lists[index].tasks[indexPath.item]
+            var task = self.lvm.lists[index].tasks[indexPath.item]
             
             cell.doneButtonTapHandler = { [unowned self] isDone in
                 task.isDone = isDone
-                vm.updateTaskComplete(task)
+                lvm.updateTaskComplete(task)
             }
             
             cell.starButtonTapHandler = { [unowned self] isImportant in
                 task.isImportant = isImportant
-                vm.updateImportant(task)
+                lvm.updateImportant(task)
             }
             
             return cell
@@ -95,7 +98,7 @@ class ToDoListViewController: UIViewController {
             }
             
             let deleteAction = UIContextualAction(style: .destructive, title: "DELETE") { [unowned self] _, _, _ in
-                vm.deleteTaskComplete(item)
+                lvm.deleteTaskComplete(item)
             }
             
             return UISwipeActionsConfiguration(actions: [deleteAction, updateAction])
@@ -105,7 +108,7 @@ class ToDoListViewController: UIViewController {
     
     private func bind() {
         guard let index = index else { return }
-        vm.$lists
+        lvm.$lists
             .receive(on: RunLoop.main)
             .sink { lists in
                 var tasks = lists[index].tasks
@@ -120,7 +123,7 @@ class ToDoListViewController: UIViewController {
     
     @objc func editButtonTapped() {
         guard let index = index else { return }
-        let list = vm.lists[index]
+        let list = lvm.lists[index]
         
         // textfield를 가진 alert 창을 띄워 list 이름 수정 기능 제공
         let editAlert = UIAlertController(title: "Type your new list name down below.", message: "", preferredStyle: .alert)
@@ -129,7 +132,7 @@ class ToDoListViewController: UIViewController {
             guard let tfText = editAlert.textFields?[0].text?.trim() else { return }
             
             if !tfText.isEmpty {
-                vm.updateList(listId: list.id, tfText)
+                lvm.updateList(listId: list.id, tfText)
                 navigationItem.title = tfText
             }
         })

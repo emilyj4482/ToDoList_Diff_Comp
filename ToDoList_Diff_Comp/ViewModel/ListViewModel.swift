@@ -1,5 +1,5 @@
 //
-//  TaskViewModel.swift
+//  ListViewModel.swift
 //  ToDoList_Diff_Comp
 //
 //  Created by EMILY on 2023/06/26.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ListViewModel {
+final class ListViewModel {
     static let shared = ListViewModel()
     
     // disk에 in app data json 파일로 저장
@@ -23,11 +23,6 @@ class ListViewModel {
             dm.savaData(lists)
         }
     }
-    
-    /* task.isDone 여부에 따라 section 분리할 때 사용할 Array
-    var undoneTasks: [Task] = []
-    var doneTasks: [Task] = []
-    */
     
     func createList(_ listName: String) -> List {
         let nextId = lastListId + 1

@@ -13,21 +13,25 @@ class MainListViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var listCountLabel: UILabel!
     
-    var vm = ListViewModel.shared
+    // view model
+    var lvm = ListViewModel.shared
+    var tvm = TaskViewModel.shared
     
+    // diffable data source
     enum Section {
         case main
     }
     typealias Item = List
     var datasource: UICollectionViewDiffableDataSource<Section, Item>!
     
+    // combine subscription
     var subscriptions = Set<AnyCancellable>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // disk에 저장돼있는 data 불러오기
-        vm.retrieveLists()
+        lvm.retrieveLists()
         
         configureCollectionView()
         bind()
@@ -48,7 +52,7 @@ class MainListViewController: UIViewController {
     }
     
     private func bind() {
-        vm.$lists
+        lvm.$lists
             .receive(on: RunLoop.main)
             .sink { lists in
                 // collection view update
@@ -60,7 +64,6 @@ class MainListViewController: UIViewController {
                 self.updateCountLabel(lists.count)
             }
             .store(in: &subscriptions)
-        
     }
     
     // list count label 뷰 적용
@@ -74,7 +77,6 @@ class MainListViewController: UIViewController {
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
-        
         // swipe to delete
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.showsSeparators = false
@@ -107,13 +109,12 @@ class MainListViewController: UIViewController {
         self.present(alert, animated: true)
     }
     
-    // delete item
+    // 삭제 대상 list가 important task를 포함하고 있을 때, list에 속했던 important task들이 Important list에서도 삭제되어야 한다.
     private func deleteItem(_ item: Item) {
-        // 삭제 대상 list가 important task를 포함하고 있을 때, list에 속했던 important task들이 Important list에서도 삭제되어야 한다.
         if item.tasks.contains(where: { $0.isImportant }) {
-            vm.lists[0].tasks.removeAll(where: { $0.listId == item.id && $0.isImportant })
+            lvm.lists[0].tasks.removeAll(where: { $0.listId == item.id && $0.isImportant })
         }
-        vm.deleteList(listId: item.id)
+        lvm.deleteList(listId: item.id)
     }
 
     @IBAction func addListButtonTapped(_ sender: UIButton) {
@@ -124,7 +125,10 @@ class MainListViewController: UIViewController {
 
 extension MainListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let list = vm.lists[indexPath.item]
+        let list = lvm.lists[indexPath.item]
+        
+        // test code
+        tvm.list = list
         
         guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "ToDoListViewController") as? ToDoListViewController else { return }
         
