@@ -15,7 +15,6 @@ class MainListViewController: UIViewController {
     
     var vm = TaskViewModel.shared
     
-    // diffable data source 정의 : 단일 섹션
     enum Section {
         case main
     }

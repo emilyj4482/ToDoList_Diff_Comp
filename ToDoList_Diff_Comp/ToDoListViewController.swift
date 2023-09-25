@@ -6,10 +6,7 @@
 //
 
 import UIKit
-
-/*
- task.isDone 여부에 따라 section을 분리하고 done task 발생 시 done section에 header가 노출되도록 하고 싶었으나 Diffable datasource 및 snapshot으로 구현하는 데 한계점이 있어 보류함.
- */
+import Combine
 
 class ToDoListViewController: UIViewController {
     
@@ -21,13 +18,12 @@ class ToDoListViewController: UIViewController {
     var index: Int?
     
     enum Section {
-        case undone
-        case done
+        case main
     }
     typealias Item = Task
     var datasource: UICollectionViewDiffableDataSource<Section, Item>!
     
-    var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+    var subscriptions = Set<AnyCancellable>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,14 +39,17 @@ class ToDoListViewController: UIViewController {
             navigationItem.rightBarButtonItem?.isHidden = true
         }
         
-        // star button tap noti
-        NotificationCenter.default.addObserver(self, selector: #selector(starButtonTapped), name: NSNotification.Name(rawValue: "starButtonTapped"), object: nil)
-        
-        // done button tap noti
-        // NotificationCenter.default.addObserver(self, selector: #selector(doneButtonTapped), name: NSNotification.Name("doneButtonTapped"), object: nil)
-        
+        configureCollectionView()
+        bind()
+    }
+    
+    private func configureCollectionView() {
+        // data source
         datasource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, item in
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TaskCell", for: indexPath) as? TaskCell else { return UICollectionViewCell() }
+            guard
+                let index = self.index,
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TaskCell", for: indexPath) as? TaskCell
+            else { return UICollectionViewCell() }
             cell.configure(item)
             
             // done & star 버튼 tap에 따른 데이터 변경
@@ -59,7 +58,6 @@ class ToDoListViewController: UIViewController {
             cell.doneButtonTapHandler = { [unowned self] isDone in
                 task.isDone = isDone
                 vm.updateTaskComplete(task)
-                // vm.moveSection(task)
             }
             
             cell.starButtonTapHandler = { [unowned self] isImportant in
@@ -70,27 +68,8 @@ class ToDoListViewController: UIViewController {
             return cell
         })
         
-        // vm.filterTasks(index)
-        reload()
-        
+        // layout
         collectionView.collectionViewLayout = layout()
-        
-        /* header
-        collectionView.register(TaskDoneHeader.self, forSupplementaryViewOfKind: "TaskDoneHeader", withReuseIdentifier: "TaskDoneHeader")
-        
-        datasource.supplementaryViewProvider = { (collectionView, kind, indexPath) -> UICollectionReusableView in
-            guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "TaskDoneHeader", for: indexPath) as? TaskDoneHeader else { return UICollectionReusableView() }
-            // task done section에만 header 표시
-            if indexPath.section == 0 {
-                header.isHidden = true
-            } else if collectionView.numberOfItems(inSection: 1) == 0 {
-                header.isHidden = true
-            } else {
-                header.isHidden = false
-            }
-            return header
-        }
-        */
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
@@ -98,8 +77,6 @@ class ToDoListViewController: UIViewController {
         // swipe to update & delete
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.showsSeparators = false
-        // config.headerMode = .supplementary
-        // config.headerTopPadding = 0
         
         config.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
             guard let item = self.datasource.itemIdentifier(for: indexPath) else { return nil }
@@ -119,54 +96,27 @@ class ToDoListViewController: UIViewController {
             
             let deleteAction = UIContextualAction(style: .destructive, title: "DELETE") { [unowned self] _, _, _ in
                 vm.deleteTaskComplete(item)
-                snapshot.deleteItems([item])
-                datasource.apply(self.snapshot)
             }
-            return UISwipeActionsConfiguration(actions: [updateAction, deleteAction])
+            
+            return UISwipeActionsConfiguration(actions: [deleteAction, updateAction])
         }
         return UICollectionViewCompositionalLayout.list(using: config)
     }
     
-    // important list에서 star button tap 시 task 사라지도록 처리 (view reload)
-    @objc func starButtonTapped(_ noti: Notification) {
-        guard
-            let index = index,
-            index == 0,
-            let isImportant = noti.object as? Bool,
-            isImportant == false
-        else { return }
-        
-        reload()
-    }
-    
-    /* done toggle 시 done, undone section 간 item 이동 구현
-    @objc func doneButtonTapped(_ noti: Notification) {
-        
-    }
-    */
-    
-    // view reload
-    private func reload() {
+    private func bind() {
         guard let index = index else { return }
-        snapshot.deleteAllItems()
-        snapshot.appendSections([.undone, .done])
-        // snapshot.appendItems(vm.undoneTasks, toSection: .undone)
-        // snapshot.appendItems(vm.doneTasks, toSection: .done)
-        snapshot.appendItems(vm.lists[index].tasks, toSection: .undone)
-        datasource.apply(snapshot)
+        vm.$lists
+            .receive(on: RunLoop.main)
+            .sink { lists in
+                var tasks = lists[index].tasks
+                // collection view update
+                var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+                snapshot.appendSections([.main])
+                snapshot.appendItems(tasks, toSection: .main)
+                self.datasource.apply(snapshot)
+            }
+            .store(in: &subscriptions)
     }
-    
-    /* header reload : task done section 발생에 따라 header 노출
-    private func headerReload(_ item: Task, _ indexPath: IndexPath) {
-        if item.isDone == true {
-            collectionView.supplementaryView(forElementKind: "UICollectionElementKindSectionHeader", at: indexPath)?.isHidden = false
-        } else if item.isDone == false && collectionView.numberOfItems(inSection: 1) != 0 {
-            collectionView.supplementaryView(forElementKind: "UICollectionElementKindSectionHeader", at: indexPath)?.isHidden = false
-        } else {
-            collectionView.supplementaryView(forElementKind: "UICollectionElementKindSectionHeader", at: indexPath)?.isHidden = true
-        }
-    }
-    */
     
     @objc func editButtonTapped() {
         guard let index = index else { return }
