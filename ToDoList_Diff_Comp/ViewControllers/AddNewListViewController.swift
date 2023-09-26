@@ -11,7 +11,7 @@ class AddNewListViewController: UIViewController {
     
     @IBOutlet weak var textField: UITextField!
 
-    var vm = TaskViewModel.shared
+    var vm = ListViewModel.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,12 +30,7 @@ class AddNewListViewController: UIViewController {
         }
         vm.addList(vm.createList(examListName(newListName)))
         
-        print(vm.lists)
-        
         dismiss(animated: true)
-        
-        // Done button에 의하여 modal dismiss 시 main에 noti
-        NotificationCenter.default.post(name: NSNotification.Name("newListAdded"), object: nil)
     }
     
     // list name 중복검사

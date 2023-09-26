@@ -12,9 +12,8 @@ class TaskEditViewController: UIViewController {
     @IBOutlet weak var doneImage: UIImageView!
     @IBOutlet weak var tf: UITextField!
     
-    var vm = TaskViewModel.shared
+    var tvm = TaskViewModel.shared
     
-    var index: Int?
     // task 추가 mode와 수정 mode로 나눈다
     var isCreating: Bool = true
     var taskToEdit: Task?
@@ -38,21 +37,19 @@ class TaskEditViewController: UIViewController {
         } else {
             editTask()
         }
-        // TODO: 입력값이 없을 때 alert 표시
-        // TODO: task 추가/수정 되자마자 view reload
         dismiss(animated: true)
     }
     
     private func addTask() {
         guard
-            let index = index,
+            let listId = tvm.list?.id,
             let title = tf.text?.trim()
         else { return }
         
         if title.isEmpty {
             showAlert()
         } else {
-            vm.addTask(listId: vm.lists[index].id, vm.createTask(listId: vm.lists[index].id, title))
+            tvm.addTask(tvm.createTask(listId: listId, title))
         }
     }
     
@@ -66,7 +63,7 @@ class TaskEditViewController: UIViewController {
             showAlert()
         } else {
             task.title = text
-            vm.updateTaskComplete(task)
+            tvm.updateTaskComplete(task)
         }
     }
     
