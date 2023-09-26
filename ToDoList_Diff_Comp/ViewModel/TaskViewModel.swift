@@ -13,7 +13,6 @@ final class TaskViewModel {
     private let lvm = ListViewModel.shared
     
     var list: List?
-    
     var index: Int {
         guard let index = lvm.lists.firstIndex(where: { $0.id == list?.id }) else { return 0 }
         return index
