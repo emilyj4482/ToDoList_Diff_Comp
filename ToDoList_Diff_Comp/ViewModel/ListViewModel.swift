@@ -35,6 +35,8 @@ final class ListViewModel {
         lists.append(list)
     }
     
+    /*
+    
     // Task 내용은 중복 허용(검사 X), 입력값에 대해 앞뒤 공백을 제거해준 뒤 생성한다.
     func createTask(listId: Int, _ title: String) -> Task {
         return Task(listId: listId, title: title.trim(), isDone: false, isImportant: false)
@@ -73,6 +75,8 @@ final class ListViewModel {
         }
         updateSingleTask(listId: task.listId, taskId: task.id, task: task)
     }
+     
+    */
     
     func updateList(listId: Int, _ name: String) {
         if let index = lists.firstIndex(where: { $0.id == listId }) {
@@ -85,6 +89,8 @@ final class ListViewModel {
             lists.remove(at: index)
         }
     }
+    
+    /*
     
     // important task인 경우 Important list와 속한 list 양쪽에서 삭제 처리 필요
     func deleteTaskComplete(_ task: Task) {
@@ -101,6 +107,8 @@ final class ListViewModel {
             }
         }
     }
+     
+    */
     
     /*
     // task.isDone 여부에 따라 Array 구분

@@ -126,14 +126,11 @@ class MainListViewController: UIViewController {
 extension MainListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let list = lvm.lists[indexPath.item]
-        
-        // test code
         tvm.list = list
+        tvm.tasks = list.tasks
         
         guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "ToDoListViewController") as? ToDoListViewController else { return }
-        
         vc.title = list.name
-        vc.index = indexPath.item
         
         navigationController?.pushViewController(vc, animated: true)
     }
